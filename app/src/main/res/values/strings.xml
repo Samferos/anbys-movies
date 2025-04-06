@@ -13,6 +13,7 @@
     <string name="clear_history">Effacer Historique</string>
     <string name="setting_allow_adult_content">Autoriser le contenu pour adulte</string>
     <string name="setting_preferred_language">Langue</string>
+    <string name="warning_invalid_search">La recherche rentrée est invalide.</string>
     <string-array name="language">
         <item>Français</item>
         <item>English</item>
