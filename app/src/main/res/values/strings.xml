@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">AnbyMovie</string>
+    <string name="search_movies">Rechercher des films</string>
+    <string name="in_app_name">anby</string>
+    <string name="search_movies_action">Découvrir</string>
+    <string name="base_actions">Actions</string>
+    <string name="favourite_movies">Favoris</string>
+    <string name="settings">Paramètres</string>
+    <string name="search_movie_title">Titre du film</string>
+    <string name="search_movie_type">Genre</string>
+    <string name="advanced_search">Recherche avancée</string>
+    <string name="history">Historique</string>
+    <string name="clear_history">Effacer Historique</string>
+    <string name="setting_allow_adult_content">Autoriser le contenu pour adulte</string>
 </resources>
