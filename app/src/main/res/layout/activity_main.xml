@@ -28,21 +28,20 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         app:liftOnScroll="true"
-        app:liftOnScrollColor="?attr/colorSurfaceContainerHighest"
         android:fitsSystemWindows="true">
         <com.google.android.material.search.SearchBar
             android:id="@+id/main_search_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/menu_24px"
-            app:menu="@menu/search_bar_menu"
-            android:hint="@string/search_movies"
-            />
+            app:liftOnScroll="true"
+            app:forceDefaultNavigationOnClickListener="true"
+            android:hint="@string/search_movies"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.search.SearchView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/main_search_view"
         app:layout_anchor="@id/main_search_bar">
     </com.google.android.material.search.SearchView>
 
