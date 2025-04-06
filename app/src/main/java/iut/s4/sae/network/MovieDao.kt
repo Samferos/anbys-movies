@@ -6,6 +6,8 @@ import io.ktor.client.request.parameter
 import iut.s4.sae.model.Genres
 import iut.s4.sae.model.Movie
 import iut.s4.sae.model.Movies
+import iut.s4.sae.BuildConfig
+
 
 class MovieDao private constructor(){
     companion object{
@@ -19,7 +21,7 @@ class MovieDao private constructor(){
         }
     }
     private val BASE_URL = "https://api.themoviedb.org/3"
-    private val API_KEY = ""
+    private val API_KEY = BuildConfig.API_KEY
     private val LANGUAGE = "fr"
 
     suspend fun fetchGenres(): Genres {
