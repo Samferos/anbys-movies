@@ -50,4 +50,21 @@ class MovieDao private constructor(){
 
 
 
+
+    suspend fun searchMovies(query: String, page : Int = 1): Movies {
+        try {
+            val response: Movies = KtorClient.client.get("$BASE_URL/search/movie") {
+                parameter("api_key", API_KEY)
+                parameter("query", query)
+                parameter("include_adult", false)
+                parameter("language", "en-US")
+                parameter("page", page.toString())
+            }.body()
+
+            return Movies(response.results)
+        } catch (e: Exception) {
+            Log.e("MoviesData", "Error searching movies: ${e.message}")
+            return Movies(emptyList())
+        }
+    }
 }
