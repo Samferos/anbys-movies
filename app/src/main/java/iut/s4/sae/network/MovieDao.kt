@@ -1,6 +1,5 @@
 package iut.s4.sae.network
 
-import android.util.Log
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -39,7 +38,7 @@ class MovieDao private constructor(){
         return response
     }
 
-    suspend fun fetchMovieDetails(movieId: String): Movie {
+    suspend fun searchMovieDetails(movieId: String): Movie {
         val url = "$BASE_URL/movie/$movieId"
         val response: Movie = KtorClient.client.get(url) {
             parameter("api_key", API_KEY)
@@ -47,9 +46,6 @@ class MovieDao private constructor(){
         }.body()
         return response
     }
-
-
-
 
     suspend fun searchMovies(query: String, page : Int = 1): Movies {
         try {
@@ -63,7 +59,6 @@ class MovieDao private constructor(){
 
             return Movies(response.results)
         } catch (e: Exception) {
-            Log.e("MoviesData", "Error searching movies: ${e.message}")
             return Movies(emptyList())
         }
     }
