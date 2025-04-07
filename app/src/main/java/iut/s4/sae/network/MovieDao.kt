@@ -64,4 +64,22 @@ class MovieDao private constructor(){
             return Movies(emptyList())
         }
     }
+
+    suspend fun discoverByGenre(
+        genreId: Int,
+        page: Int = 1,
+        sortBy: String = "popularity.desc",
+        includeAdult: Boolean = false
+    ): Movies {
+        val response: Movies = KtorClient.client.get("$BASE_URL/discover/movie") {
+            parameter("api_key", API_KEY)
+            parameter("language", LANGUAGE)
+            parameter("include_adult", includeAdult)
+            parameter("page", page)
+            parameter("sort_by", sortBy)
+            parameter("with_genres", genreId)
+        }.body()
+        return response
+    }
+
 }
