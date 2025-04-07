@@ -1,7 +1,9 @@
 package iut.s4.sae.model
 
-import iut.s4.sae.network.MovieDao
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
+@Parcelize
 @Serializable
-data class Genres(val genres: List<Genre>)
+data class Genres(val genres: List<Genre>) : Parcelable

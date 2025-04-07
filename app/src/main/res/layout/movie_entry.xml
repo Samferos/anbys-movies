@@ -34,8 +34,9 @@
                 android:textAppearance="?attr/textAppearanceBodySmall"/>
         </LinearLayout>
         <ImageView
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:minHeight="124dp"
             android:layout_weight="2"
             android:scaleType="centerCrop"
             android:src="@drawable/media"/>

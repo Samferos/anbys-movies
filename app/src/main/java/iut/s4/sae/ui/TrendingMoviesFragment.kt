@@ -1,11 +1,19 @@
 package iut.s4.sae.ui
 
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Recycler
+import com.google.android.material.carousel.CarouselLayoutManager
 import iut.s4.sae.R
+import iut.s4.sae.model.Genres
+import iut.s4.sae.model.Movies
 
 private const val ARG_PARAM1 = "movies"
 private const val ARG_PARAM2 = "genres"
@@ -15,14 +23,14 @@ private const val ARG_PARAM2 = "genres"
  * as well as a grid of movie genres beneath.
  */
 class TrendingMoviesFragment : Fragment() {
-    private var trendingMovies: Array<Any>? = null
-    private var movieGenres: Array<Any>? = null
+    private var trendingMovies: Movies? = null
+    private var movieGenres: Genres? = null
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            //trendingMovies = it.getParcelable(ARG_PARAM1)
-        }
+        trendingMovies = requireArguments().getParcelable(ARG_PARAM1, Movies::class.java)
+        Log.d(this::class.simpleName, "Retrieved movies $trendingMovies")
     }
 
     override fun onCreateView(
@@ -30,6 +38,13 @@ class TrendingMoviesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_trending_movies, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val carousel = view.findViewById<RecyclerView>(R.id.trending_movies_fragment_carousel)
+        carousel?.adapter = TrendingMovieAdapter(trendingMovies ?: Movies(listOf()))
+        carousel?.layoutManager = CarouselLayoutManager()
     }
 
     companion object {
@@ -43,13 +58,12 @@ class TrendingMoviesFragment : Fragment() {
          * grid of cards.
          * @return A new instance of fragment TrendingMoviesFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(movies: Array<Any>, genres: Array<Any>) =
+        fun newInstance(movies: Movies, genres: Genres) =
             TrendingMoviesFragment().apply {
                 arguments = Bundle().apply {
-                    //putParcelableArray(ARG_PARAM1, movies)
-                    //putParcelableArray(ARG_PARAM2, genres)
+                    putParcelable(ARG_PARAM1, movies)
+                    putParcelable(ARG_PARAM2, genres)
                 }
             }
     }

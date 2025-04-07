@@ -7,10 +7,13 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.search.SearchBar
 import com.google.android.material.search.SearchView
 import iut.s4.sae.R
+import iut.s4.sae.network.MovieDao
+import kotlinx.coroutines.runBlocking
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -54,7 +57,13 @@ class MainActivity : AppCompatActivity() {
         bottomBar.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.bottom_bar_movies_menu -> {
-                    TODO("Display trending movies fragment")
+                    supportFragmentManager.commit {
+                        runBlocking {
+                            replace(R.id.main_movie_list_fragment_view, TrendingMoviesFragment.newInstance(
+                                MovieDao.getInstance().fetchTrendingMovies(), MovieDao.getInstance().fetchGenres()))
+                        }
+                    }
+                    true
                 }
                 R.id.bottom_bar_favourite_movies_menu -> {
                     TODO("Display favourite movies fragment")

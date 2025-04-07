@@ -1,8 +1,12 @@
 package iut.s4.sae.model
 
+import android.os.Parcel
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Parcelize
 @Serializable
 data class Movie(
     val adult: Boolean,
@@ -20,4 +24,4 @@ data class Movie(
     val video: Boolean,
     @SerialName("vote_average") val voteAverage: Double? = null,
     @SerialName("vote_count") val voteCount: Int? = null
-)
+) : Parcelable
