@@ -17,6 +17,10 @@
     <string name="trending_movies_header">Tendances</string>
     <string name="trending_filter_daily">Du jour</string>
     <string name="trending_filter_weekly">De la semaine</string>
+    <string name="movie_poster">Movie Poster</string>
+    <string name="release_date">Release Date</string>
+    <string name="genre">Genre</string>
+    <string name="title">Title</string>
     <string-array name="language">
         <item>Français</item>
         <item>English</item>
