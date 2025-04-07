@@ -26,6 +26,14 @@ class MainActivity : AppCompatActivity() {
 
         val searchView = findViewById<SearchView>(R.id.main_search_view)
 
+        // Set fragment to trending movies by default
+        supportFragmentManager.commit {
+            runBlocking {
+                replace(R.id.main_movie_list_fragment_view, TrendingMoviesFragment.newInstance(
+                    MovieDao.getInstance().fetchTrendingMovies(), MovieDao.getInstance().fetchGenres()))
+            }
+        }
+
         searchBar.setNavigationOnClickListener {
             if (searchView.text.isEmpty()) {
                 searchView.show()

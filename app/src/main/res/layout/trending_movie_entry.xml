@@ -28,7 +28,7 @@
             android:textAppearance="?attr/textAppearanceTitleLarge"
             android:textAlignment="center"
             android:layout_gravity="bottom"
-            tools:ignore="RtlCompat" />
+            tools:ignore="RtlCompat"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

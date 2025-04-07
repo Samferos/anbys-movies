@@ -7,13 +7,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Recycler
 import com.google.android.material.carousel.CarouselLayoutManager
+import com.google.android.material.chip.Chip
 import iut.s4.sae.R
 import iut.s4.sae.model.Genres
 import iut.s4.sae.model.Movies
+import iut.s4.sae.network.MovieDao
+import kotlinx.coroutines.runBlocking
 
 private const val ARG_PARAM1 = "movies"
 private const val ARG_PARAM2 = "genres"
@@ -30,6 +33,7 @@ class TrendingMoviesFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         trendingMovies = requireArguments().getParcelable(ARG_PARAM1, Movies::class.java)
+        movieGenres = requireArguments().getParcelable(ARG_PARAM2, Genres::class.java)
         Log.d(this::class.simpleName, "Retrieved movies $trendingMovies")
     }
 
@@ -42,9 +46,38 @@ class TrendingMoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val carousel = view.findViewById<RecyclerView>(R.id.trending_movies_fragment_carousel)
-        carousel?.adapter = TrendingMovieAdapter(trendingMovies ?: Movies(listOf()))
+        val trendingMovieAdapter = TrendingMovieAdapter(trendingMovies ?: Movies(listOf()))
+        carousel?.adapter = trendingMovieAdapter
         carousel?.layoutManager = CarouselLayoutManager()
+
+        val trendingFilterDaily = view.findViewById<Chip>(R.id.trending_movies_fragment_daily_chip)
+        val trendingFilterWeekly = view.findViewById<Chip>(R.id.trending_movies_fragment_weekly_chip)
+
+        trendingFilterDaily.isChecked = true
+
+        trendingFilterDaily.setOnClickListener {
+            trendingFilterDaily.isChecked = true
+            trendingFilterWeekly.isChecked = false
+            runBlocking {
+                trendingMovies = MovieDao.getInstance().fetchTrendingMovies("day")
+            }
+            trendingMovieAdapter.updateMovies(trendingMovies ?: Movies(listOf()))
+        }
+
+        trendingFilterWeekly.setOnClickListener {
+            trendingFilterWeekly.isChecked = true
+            trendingFilterDaily.isChecked = false
+            runBlocking {
+                trendingMovies = MovieDao.getInstance().fetchTrendingMovies("week")
+            }
+            trendingMovieAdapter.updateMovies(trendingMovies ?: Movies(listOf()))
+        }
+
+        val genreList = view.findViewById<AdapterView<GenreAdapter>>(R.id.trending_movies_fragment_genres)
+        val genreListAdapter = GenreAdapter(movieGenres ?: Genres(listOf()))
+        genreList.adapter = genreListAdapter
     }
 
     companion object {

@@ -14,6 +14,9 @@
     <string name="setting_allow_adult_content">Autoriser le contenu pour adulte</string>
     <string name="setting_preferred_language">Langue</string>
     <string name="warning_invalid_search">La recherche rentrée est invalide.</string>
+    <string name="trending_movies_header">Tendances</string>
+    <string name="trending_filter_daily">Du jour</string>
+    <string name="trending_filter_weekly">De la semaine</string>
     <string-array name="language">
         <item>Français</item>
         <item>English</item>

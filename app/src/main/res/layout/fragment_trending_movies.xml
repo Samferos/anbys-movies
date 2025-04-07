@@ -2,14 +2,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.TrendingMoviesFragment"
+    android:padding="16dp"
     android:orientation="vertical">
 
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceDisplayMedium"
+        android:text="@string/trending_movies_header"/>
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:id="@+id/trending_movies_fragment_daily_chip"
+            android:text="@string/trending_filter_daily"/>
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:id="@+id/trending_movies_fragment_weekly_chip"
+            android:text="@string/trending_filter_weekly"/>
+    </com.google.android.material.chip.ChipGroup>
     <!-- Carousel -->
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="296dp"
+        android:layout_height="196dp"
         android:id="@+id/trending_movies_fragment_carousel"
         android:clipChildren="false"
         android:clipToPadding="false"
@@ -17,10 +40,12 @@
     </androidx.recyclerview.widget.RecyclerView>
 
     <!-- Genres -->
-    <androidx.recyclerview.widget.RecyclerView
+    <GridView
+        android:numColumns="auto_fit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:stretchMode="columnWidth"
         android:id="@+id/trending_movies_fragment_genres">
-    </androidx.recyclerview.widget.RecyclerView>
-
+    </GridView>
 </LinearLayout>
