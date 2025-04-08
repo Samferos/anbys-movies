@@ -2,7 +2,9 @@ package iut.s4.sae.ui
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -21,6 +23,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlin.math.roundToLong
 import androidx.core.content.edit
+import androidx.core.view.updateLayoutParams
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.serialization.encodeToString
 
@@ -46,6 +49,16 @@ class MovieDetailActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+        floatingButtonAddFavorite = findViewById(R.id.floating_action_button_add_favorite)
+        ViewCompat.setOnApplyWindowInsetsListener(floatingButtonAddFavorite) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = systemBars.bottom + 8.dp
+            }
+
             insets
         }
         val topBar = findViewById<MaterialToolbar>(R.id.movie_detail_topbar)
@@ -101,7 +114,6 @@ class MovieDetailActivity : AppCompatActivity() {
         carousel.adapter = similarMovieAdapter
         carousel.layoutManager = CarouselLayoutManager()
 
-        floatingButtonAddFavorite = findViewById<FloatingActionButton>(R.id.floating_action_button_add_favorite)
         if (movie != null) {
             isFavorite = isMovieFavorite(this@MovieDetailActivity, movie)
             updateFloatingActionButton()
@@ -161,5 +173,9 @@ class MovieDetailActivity : AppCompatActivity() {
             floatingButtonAddFavorite.setImageResource(R.drawable.baseline_favorite_border_24)
         }
     }
+
+    private val Int.dp: Int
+        get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
 
 }
