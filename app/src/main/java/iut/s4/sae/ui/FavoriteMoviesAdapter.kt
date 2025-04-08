@@ -1,14 +1,19 @@
 package iut.s4.sae.ui
 
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.edit
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import iut.s4.sae.R
 import iut.s4.sae.model.Movies
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class FavoriteMoviesAdapter(private var movies : Movies, private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<FavoriteMoviesAdapter.ViewHolder>() {
 
@@ -52,11 +57,18 @@ class FavoriteMoviesAdapter(private var movies : Movies, private val onItemClick
         notifyDataSetChanged()
     }
 
-    fun removeMovie(position: Int) {
+    fun removeMovie(context : Context, position: Int) {
         val newList = movies.results.toMutableList()
         newList.removeAt(position)
-        updateMovies(Movies(newList.toList()))
+        val updatedMovies = Movies(newList.toList())
+        updateMovies(updatedMovies)
         notifyItemRemoved(position)
+
+        val sharedPreferences = context.getSharedPreferences("favorites", MODE_PRIVATE)
+        sharedPreferences.edit() {
+            val updatedJson = Json.encodeToString(updatedMovies)
+            putString("favorite_movies", updatedJson)
+        }
     }
 
 

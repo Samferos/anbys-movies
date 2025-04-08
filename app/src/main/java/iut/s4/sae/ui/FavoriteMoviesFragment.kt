@@ -59,7 +59,7 @@ class FavoriteMoviesFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                favoriteMoviesAdapter.removeMovie(position)
+                favoriteMoviesAdapter.removeMovie(requireContext(),position)
             }
         }
 
