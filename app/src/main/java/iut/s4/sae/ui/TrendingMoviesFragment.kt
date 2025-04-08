@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.chip.Chip
 import iut.s4.sae.R
+import iut.s4.sae.SettingsManager
 import iut.s4.sae.model.Genres
 import iut.s4.sae.model.Movies
 import iut.s4.sae.network.MovieDao
@@ -29,6 +30,11 @@ private const val ARG_PARAM2 = "genres"
 class TrendingMoviesFragment : Fragment() {
     private var trendingMovies: Movies? = null
     private var movieGenres: Genres? = null
+
+    val allowAdult : Boolean
+        get() = SettingsManager.isAdultContentAllowed(requireContext())
+    val language : String
+        get() = SettingsManager.getPreferredLanguage(requireContext())
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +75,7 @@ class TrendingMoviesFragment : Fragment() {
             trendingFilterDaily.isChecked = true
             trendingFilterWeekly.isChecked = false
             runBlocking {
-                trendingMovies = MovieDao.getInstance().fetchTrendingMovies("day")
+                trendingMovies = MovieDao.getInstance().fetchTrendingMovies("day", language)
             }
             trendingMovieAdapter.updateMovies(trendingMovies ?: Movies(listOf()))
         }
@@ -78,7 +84,7 @@ class TrendingMoviesFragment : Fragment() {
             trendingFilterWeekly.isChecked = true
             trendingFilterDaily.isChecked = false
             runBlocking {
-                trendingMovies = MovieDao.getInstance().fetchTrendingMovies("week")
+                trendingMovies = MovieDao.getInstance().fetchTrendingMovies("week", language)
             }
             trendingMovieAdapter.updateMovies(trendingMovies ?: Movies(listOf()))
         }
