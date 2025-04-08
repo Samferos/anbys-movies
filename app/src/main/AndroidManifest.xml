@@ -16,6 +16,9 @@
         android:theme="@style/Theme.AnbyMovie"
         tools:targetApi="31">
         <activity
+            android:name=".ui.MovieDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.SearchActivity"
             android:exported="false" />
         <activity
@@ -29,7 +32,7 @@
         </activity>
         <activity
             android:name=".ui.SettingsActivity"
-            android:exported="true"/>
+            android:exported="true" />
     </application>
 
 </manifest>

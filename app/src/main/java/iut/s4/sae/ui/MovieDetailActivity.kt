@@ -1,0 +1,109 @@
+package iut.s4.sae.ui
+
+import android.content.Intent
+import android.os.Bundle
+import android.util.Log
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.carousel.CarouselLayoutManager
+import com.squareup.picasso.Picasso
+import iut.s4.sae.R
+import iut.s4.sae.model.Movie
+import iut.s4.sae.model.Movies
+import iut.s4.sae.network.MovieDao
+import kotlinx.coroutines.runBlocking
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
+
+class MovieDetailActivity : AppCompatActivity() {
+    private lateinit var backdrop : ImageView
+    private lateinit var poster : ImageView
+    private lateinit var titleTextView : TextView
+    private lateinit var yearTextView: TextView
+    private lateinit var scoreTextView: TextView
+    private lateinit var dateTextView: TextView
+    private lateinit var genreTextView: TextView
+    private lateinit var runtimeTextView: TextView
+    private lateinit var overviewTextView: TextView
+    private lateinit var carousel : RecyclerView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_movie_detail)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+        val topBar = findViewById<MaterialToolbar>(R.id.movie_detail_topbar)
+        val movieId = intent.getIntExtra("movie_id", -1)
+        val movie : Movie?
+
+        backdrop = findViewById(R.id.movie_detail_backdrop)
+        poster = findViewById(R.id.movie_detail_poster)
+        titleTextView = findViewById(R.id.movie_detail_title)
+        yearTextView = findViewById(R.id.movie_detail_year)
+        scoreTextView = findViewById(R.id.movie_detail_score)
+        dateTextView = findViewById(R.id.movie_detail_date)
+        genreTextView = findViewById(R.id.movie_detail_genre)
+        runtimeTextView = findViewById(R.id.movie_detail_runtime)
+        overviewTextView = findViewById(R.id.movie_detail_overview)
+        carousel = findViewById(R.id.movie_detail_carousel)
+
+        runBlocking {
+            movie = MovieDao.getInstance().searchMovieDetails(movieId.toString())
+        }
+
+        Picasso.get().load("https://image.tmdb.org/t/p/original${movie?.backdropPath}")
+            .into(backdrop)
+        Picasso.get().load("https://image.tmdb.org/t/p/original${movie?.posterPath}")
+            .into(poster)
+
+        topBar.setNavigationOnClickListener {
+            finish()
+        }
+        titleTextView.text = movie?.title
+        yearTextView.text = ("(${movie?.releaseDate?.split("-")?.get(0) ?: ""})")
+        dateTextView.text = movie?.releaseDate
+        scoreTextView.text = ("${movie?.voteAverage?.roundToLong()}/10")
+        genreTextView.text = movie?.genres?.joinToString(" - ") { it.name }
+        runtimeTextView.text = formatRuntime(movie?.runtime)
+        overviewTextView.text = movie?.overview
+
+        val similarMovie : Movies
+
+        runBlocking {
+            similarMovie = MovieDao.getInstance().fetchSimilarMovies(movieId)
+        }
+
+        val similarMovieAdapter = SimilarMovieAdapter(similarMovie ?: Movies(listOf())) { position ->
+            val clickedMovie = similarMovie.results[position]
+            val _movieId = clickedMovie.id ?: return@SimilarMovieAdapter
+            val intent = Intent(this, MovieDetailActivity::class.java).apply {
+                putExtra("movie_id", _movieId)
+            }
+            startActivity(intent)}
+
+            carousel.adapter = similarMovieAdapter
+        carousel.layoutManager = CarouselLayoutManager()
+    }
+
+    private fun formatRuntime(runtimeInMinutes: Int?): String {
+        return if (runtimeInMinutes != null) {
+            val hours = runtimeInMinutes / 60
+            val minutes = runtimeInMinutes % 60
+            "${hours}h${minutes}"
+        } else {
+            "N/A"
+        }
+    }
+
+
+}

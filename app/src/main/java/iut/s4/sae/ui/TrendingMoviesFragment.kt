@@ -1,5 +1,6 @@
 package iut.s4.sae.ui
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -48,7 +49,14 @@ class TrendingMoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val carousel = view.findViewById<RecyclerView>(R.id.trending_movies_fragment_carousel)
-        val trendingMovieAdapter = TrendingMovieAdapter(trendingMovies ?: Movies(listOf()))
+        val trendingMovieAdapter = TrendingMovieAdapter(trendingMovies ?: Movies(listOf())) {position ->
+            val clickedMovie = trendingMovies?.results?.get(position)
+            val movieId = clickedMovie?.id ?: return@TrendingMovieAdapter
+            val intent = Intent(requireContext(), MovieDetailActivity::class.java).apply {
+                putExtra("movie_id", movieId)
+            }
+            startActivity(intent)
+        }
         carousel?.adapter = trendingMovieAdapter
         carousel?.layoutManager = CarouselLayoutManager()
 

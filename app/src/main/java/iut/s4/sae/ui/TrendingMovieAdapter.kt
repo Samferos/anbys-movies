@@ -10,7 +10,7 @@ import com.squareup.picasso.Picasso
 import iut.s4.sae.R
 import iut.s4.sae.model.Movies
 
-class TrendingMovieAdapter(private var movies: Movies) : RecyclerView.Adapter<TrendingMovieAdapter.ViewHolder>() {
+class TrendingMovieAdapter(private var movies: Movies, private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<TrendingMovieAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var poster : ImageView = view.findViewById(R.id.trending_movie_entry_image)
@@ -33,6 +33,9 @@ class TrendingMovieAdapter(private var movies: Movies) : RecyclerView.Adapter<Tr
         } else {
             val image = Picasso.get().load("https://image.tmdb.org/t/p/original${movies.results[position].backdropPath}")
                 .into(holder.poster)
+        }
+        holder.itemView.setOnClickListener{
+            onItemClick(position)
         }
     }
 
