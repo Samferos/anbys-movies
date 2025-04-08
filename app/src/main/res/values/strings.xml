@@ -21,6 +21,7 @@
     <string name="release_date">Release Date</string>
     <string name="genre">Genre</string>
     <string name="title">Title</string>
+    <string name="movie_genres_header">Genres</string>
     <string-array name="language">
         <item>Français</item>
         <item>English</item>
