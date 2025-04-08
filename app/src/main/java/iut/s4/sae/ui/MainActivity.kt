@@ -1,6 +1,8 @@
 package iut.s4.sae.ui
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.widget.Toast
@@ -12,8 +14,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.search.SearchBar
 import com.google.android.material.search.SearchView
 import iut.s4.sae.R
+import iut.s4.sae.model.Movies
 import iut.s4.sae.network.MovieDao
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -74,7 +78,17 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.bottom_bar_favourite_movies_menu -> {
-                    TODO("Display favourite movies fragment")
+                    supportFragmentManager.commit {
+                        runBlocking {
+                            replace(
+                                R.id.main_movie_list_fragment_view,
+                                FavoriteMoviesFragment.newInstance(
+                                    getFavoriteMovie(this@MainActivity)
+                                )
+                            )
+                        }
+                    }
+                    true
                 }
                 R.id.bottom_bar_settings_menu -> {
                     startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
@@ -107,5 +121,15 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.onCreateOptionsMenu(menu)
+    }
+
+    fun getFavoriteMovie(context : Context) : Movies {
+        val sharedPreferences : SharedPreferences = context.getSharedPreferences("favorites", Context.MODE_PRIVATE)
+        val jsonMovies = sharedPreferences.getString("favorite_movies",null)
+        return if (jsonMovies != null) {
+            Json.decodeFromString<Movies>(jsonMovies)
+        } else {
+            Movies(listOf())
+        }
     }
 }
