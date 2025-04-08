@@ -23,5 +23,6 @@ data class Movie(
     val title: String,
     val video: Boolean,
     @SerialName("vote_average") val voteAverage: Double? = null,
-    @SerialName("vote_count") val voteCount: Int? = null
+    @SerialName("vote_count") val voteCount: Int? = null,
+    @SerialName("runtime") val runtime: Int? = null
 ) : Parcelable
