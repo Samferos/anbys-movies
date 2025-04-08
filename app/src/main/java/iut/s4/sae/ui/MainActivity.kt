@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
     fun searchMovie(searchTerm: String) {
         val intent = Intent(this, SearchActivity::class.java)
         val movies = runBlocking {
-            MovieDao.getInstance().searchMovies(searchTerm)
+            MovieDao.getInstance().searchMovies(searchTerm, language=language, includeAdult = allowAdult)
         }
         intent
             .putExtra(SearchActivity.MOVIES_ARGUMENT, movies)
