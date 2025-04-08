@@ -89,7 +89,19 @@ class MovieDao private constructor(){
         } catch (e: Exception){
             return Movies(emptyList())
         }
-
     }
+
+    suspend fun fetchSimilarMovies(
+        movieId: Int,
+        page: Int = 1
+    ): Movies {
+        val response: Movies = KtorClient.client.get("$BASE_URL/movie/$movieId/similar") {
+            parameter("api_key", API_KEY)
+            parameter("language", LANGUAGE)
+            parameter("page", page)
+        }.body()
+        return response
+    }
+
 
 }
