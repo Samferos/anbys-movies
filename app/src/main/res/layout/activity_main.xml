@@ -15,11 +15,18 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/main_movie_list_fragment_view">
         </androidx.fragment.app.FragmentContainerView>
 
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/main_bottom_navbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_bar_menu"/>
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/main_app_bar"
@@ -42,13 +49,5 @@
         android:id="@+id/main_search_view"
         app:layout_anchor="@id/main_search_bar">
     </com.google.android.material.search.SearchView>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/main_bottom_navbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
-        app:menu="@menu/bottom_bar_menu"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

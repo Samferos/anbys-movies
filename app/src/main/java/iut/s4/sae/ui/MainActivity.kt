@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.search.SearchBar
@@ -21,6 +22,8 @@ import kotlinx.serialization.json.Json
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
+    val currentFragment : Fragment? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -43,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 searchView.show()
             }
             else {
-                // Search with already present text
+                searchMovie(searchView.text.toString())
             }
         }
 
@@ -62,13 +65,17 @@ class MainActivity : AppCompatActivity() {
                 }
                 searchBar.setText(v.text)
                 searchView.hide()
-                false
+                searchMovie(v.text.toString())
+                true
             }
 
         val bottomBar = findViewById<BottomNavigationView>(R.id.main_bottom_navbar)
         bottomBar.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.bottom_bar_movies_menu -> {
+                    if (currentFragment is TrendingMoviesFragment) {
+                        return@setOnItemSelectedListener true
+                    }
                     supportFragmentManager.commit {
                         runBlocking {
                             replace(R.id.main_movie_list_fragment_view, TrendingMoviesFragment.newInstance(
@@ -131,5 +138,16 @@ class MainActivity : AppCompatActivity() {
         } else {
             Movies(listOf())
         }
+    }
+
+    fun searchMovie(searchTerm: String) {
+        val intent = Intent(this, SearchActivity::class.java)
+        val movies = runBlocking {
+            MovieDao.getInstance().searchMovies(searchTerm)
+        }
+        intent
+            .putExtra(SearchActivity.MOVIES_ARGUMENT, movies)
+            .putExtra(SearchActivity.SEARCH_TERM_ARGUMENT, searchTerm)
+        startActivity(intent)
     }
 }

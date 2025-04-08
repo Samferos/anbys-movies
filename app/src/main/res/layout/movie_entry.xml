@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:contentPadding="8dp"
-    app:cardCornerRadius="8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -36,13 +35,17 @@
                 android:text="@string/release_date"
                 android:textAppearance="?attr/textAppearanceBodySmall"/>
         </LinearLayout>
-        <ImageView
-            android:id="@+id/iv_movie_poster"
+        <FrameLayout
             android:layout_height="100dp"
-            android:layout_width="250dp"
-            android:contentDescription="@string/movie_poster"
-            android:scaleType="centerCrop"
-            android:src="@drawable/media"/>
+            android:layout_width="250dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/iv_movie_poster"
+                android:contentDescription="@string/movie_poster"
+                android:scaleType="centerCrop"
+                android:src="@drawable/media"/>
+        </FrameLayout>
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
