@@ -14,7 +14,7 @@
         android:orientation="horizontal"
         android:gravity="center">
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -38,11 +38,9 @@
         </LinearLayout>
         <ImageView
             android:id="@+id/iv_movie_poster"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_width="250dp"
             android:contentDescription="@string/movie_poster"
-            android:minHeight="124dp"
-            android:layout_weight="2"
             android:scaleType="centerCrop"
             android:src="@drawable/media"/>
     </LinearLayout>

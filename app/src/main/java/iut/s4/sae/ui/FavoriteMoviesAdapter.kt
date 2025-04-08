@@ -30,16 +30,16 @@ class FavoriteMoviesAdapter(private var movies : Movies) : RecyclerView.Adapter<
     }
 
     override fun onBindViewHolder(
-        holder: FavoriteMoviesAdapter.ViewHolder,
+        holder: ViewHolder,
         position: Int
     ) {
         holder.title.text = movies.results[position].title
         holder.genre.text = movies.results[position].genres.joinToString(separator = " · ") { it.name }
         holder.releaseDate.text = movies.results[position].releaseDate
-        if (movies.results[position].posterPath == null) {
+        if (movies.results[position].backdropPath == null) {
             holder.poster.setImageResource(R.drawable.media)
         } else {
-            val image = Picasso.get().load("https://image.tmdb.org/t/p/original${movies.results[position].posterPath}")
+            val image = Picasso.get().load("https://image.tmdb.org/t/p/original${movies.results[position].backdropPath}")
                 .into(holder.poster)
         }
     }

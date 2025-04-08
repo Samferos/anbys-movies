@@ -1,8 +1,8 @@
 package iut.s4.sae.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -18,8 +18,12 @@ import iut.s4.sae.model.Movie
 import iut.s4.sae.model.Movies
 import iut.s4.sae.network.MovieDao
 import kotlinx.coroutines.runBlocking
-import kotlin.math.roundToInt
+import kotlinx.serialization.json.Json
 import kotlin.math.roundToLong
+import androidx.core.content.edit
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.serialization.encodeToString
+
 
 class MovieDetailActivity : AppCompatActivity() {
     private lateinit var backdrop : ImageView
@@ -32,6 +36,8 @@ class MovieDetailActivity : AppCompatActivity() {
     private lateinit var runtimeTextView: TextView
     private lateinit var overviewTextView: TextView
     private lateinit var carousel : RecyclerView
+    private lateinit var floatingButtonAddFavorite : FloatingActionButton
+    private var isFavorite : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,10 +95,25 @@ class MovieDetailActivity : AppCompatActivity() {
             val intent = Intent(this, MovieDetailActivity::class.java).apply {
                 putExtra("movie_id", _movieId)
             }
-            startActivity(intent)}
+            startActivity(intent)
+        }
 
-            carousel.adapter = similarMovieAdapter
+        carousel.adapter = similarMovieAdapter
         carousel.layoutManager = CarouselLayoutManager()
+
+        floatingButtonAddFavorite = findViewById<FloatingActionButton>(R.id.floating_action_button_add_favorite)
+        if (movie != null) {
+            isFavorite = isMovieFavorite(this@MovieDetailActivity, movie)
+            updateFloatingActionButton()
+        }
+        floatingButtonAddFavorite.setOnClickListener {
+            if (movie != null) {
+                toggleFavorite(this@MovieDetailActivity, movie)
+                updateFloatingActionButton()
+            }
+        }
+
+
     }
 
     private fun formatRuntime(runtimeInMinutes: Int?): String {
@@ -105,5 +126,40 @@ class MovieDetailActivity : AppCompatActivity() {
         }
     }
 
+    private fun toggleFavorite(context: Context, movie: Movie) {
+        val sharedPreferences = context.getSharedPreferences("favorites", MODE_PRIVATE)
+        val jsonMovies = sharedPreferences.getString("favorite_movies", null)
+        val movies = if (jsonMovies != null) {
+            Json.decodeFromString<Movies>(jsonMovies)
+        } else {
+            Movies(emptyList())
+        }
+
+        val updatedMovies = if (isFavorite) {
+            movies.results.filterNot { it.id == movie.id }
+        } else {
+            movies.results + movie
+        }
+        isFavorite = !isFavorite
+        sharedPreferences.edit() {
+            val updatedJson = Json.encodeToString(Movies(updatedMovies))
+            putString("favorite_movies", updatedJson)
+        }
+    }
+
+    private fun isMovieFavorite(context: Context, movie: Movie): Boolean {
+        val sharedPreferences = context.getSharedPreferences("favorites", MODE_PRIVATE)
+        val json = sharedPreferences.getString("favorite_movies", null) ?: return false
+        val movies = Json.decodeFromString<Movies>(json)
+        return movies.results.any { it.id == movie.id }
+    }
+
+    private fun updateFloatingActionButton() {
+        if (isFavorite) {
+            floatingButtonAddFavorite.setImageResource(R.drawable.baseline_favorite_24)
+        } else {
+            floatingButtonAddFavorite.setImageResource(R.drawable.baseline_favorite_border_24)
+        }
+    }
 
 }
