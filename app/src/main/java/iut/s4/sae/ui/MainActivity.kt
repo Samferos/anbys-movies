@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getFavoriteMovie(context : Context) : Movies {
-        val sharedPreferences : SharedPreferences = context.getSharedPreferences("favorites", Context.MODE_PRIVATE)
+        val sharedPreferences : SharedPreferences = context.getSharedPreferences("favorites", MODE_PRIVATE)
         val jsonMovies = sharedPreferences.getString("favorite_movies",null)
         return if (jsonMovies != null) {
             Json.decodeFromString<Movies>(jsonMovies)

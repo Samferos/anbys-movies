@@ -10,7 +10,7 @@ import com.squareup.picasso.Picasso
 import iut.s4.sae.R
 import iut.s4.sae.model.Movies
 
-class FavoriteMoviesAdapter(private var movies : Movies) : RecyclerView.Adapter<FavoriteMoviesAdapter.ViewHolder>() {
+class FavoriteMoviesAdapter(private var movies : Movies, private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<FavoriteMoviesAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title : TextView = view.findViewById(R.id.tv_movie_title)
@@ -41,6 +41,9 @@ class FavoriteMoviesAdapter(private var movies : Movies) : RecyclerView.Adapter<
         } else {
             val image = Picasso.get().load("https://image.tmdb.org/t/p/original${movies.results[position].backdropPath}")
                 .into(holder.poster)
+        }
+        holder.itemView.setOnClickListener{
+            onItemClick(position)
         }
     }
 

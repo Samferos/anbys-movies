@@ -1,5 +1,6 @@
 package iut.s4.sae.ui
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -37,7 +38,14 @@ class FavoriteMoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerViewFavoriteMovies = view.findViewById<RecyclerView>(R.id.recycler_view_favorite_movie)
-        val favoriteMoviesAdapter = FavoriteMoviesAdapter(favoriteMovies ?: Movies(listOf()))
+        val favoriteMoviesAdapter = FavoriteMoviesAdapter(favoriteMovies ?: Movies(listOf())) {position ->
+            val clickedMovie = favoriteMovies?.results?.get(position)
+            val movieId = clickedMovie?.id ?: return@FavoriteMoviesAdapter
+            val intent = Intent(requireContext(), MovieDetailActivity::class.java).apply {
+                putExtra("movie_id", movieId)
+            }
+            startActivity(intent)
+        }
 
         recyclerViewFavoriteMovies.adapter = favoriteMoviesAdapter
         recyclerViewFavoriteMovies.layoutManager = LinearLayoutManager(context)
