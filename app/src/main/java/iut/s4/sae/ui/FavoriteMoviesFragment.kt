@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -49,6 +50,13 @@ class FavoriteMoviesFragment : Fragment() {
 
         recyclerViewFavoriteMovies.adapter = favoriteMoviesAdapter
         recyclerViewFavoriteMovies.layoutManager = LinearLayoutManager(context)
+
+        val llNoMovie : LinearLayout = view.findViewById<LinearLayout>(R.id.ll_no_movie)
+        if (favoriteMovies!!.results.isEmpty()) {
+            llNoMovie.visibility = View.VISIBLE
+        } else {
+            llNoMovie.visibility = View.GONE
+        }
 
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             override fun onMove(

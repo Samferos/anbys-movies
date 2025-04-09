@@ -128,6 +128,12 @@ class MovieDetailActivity : AppCompatActivity() {
 
     }
 
+    override fun attachBaseContext(newBase: Context) {
+        val sharedPreferences = newBase.getSharedPreferences("language", MODE_PRIVATE)
+        val lang = sharedPreferences.getString("language_preference", "") ?: "en"
+        super.attachBaseContext(LanguageContextWrapper.wrap(newBase, lang))
+    }
+
     private fun formatRuntime(runtimeInMinutes: Int?): String {
         return if (runtimeInMinutes != null) {
             val hours = runtimeInMinutes / 60

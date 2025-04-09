@@ -36,7 +36,7 @@
                 android:textAppearance="?attr/textAppearanceBodySmall"/>
         </LinearLayout>
         <FrameLayout
-            android:layout_height="100dp"
+            android:layout_height="124dp"
             android:layout_width="250dp">
             <ImageView
                 android:layout_width="match_parent"

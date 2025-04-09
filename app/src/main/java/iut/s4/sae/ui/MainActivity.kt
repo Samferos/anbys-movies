@@ -130,6 +130,13 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun attachBaseContext(newBase: Context) {
+        val sharedPreferences = newBase.getSharedPreferences("language", MODE_PRIVATE)
+        val lang = sharedPreferences.getString("language_preference", "") ?: "en"
+        super.attachBaseContext(LanguageContextWrapper.wrap(newBase, lang))
+    }
+
+
     fun getFavoriteMovie(context : Context) : Movies {
         val sharedPreferences : SharedPreferences = context.getSharedPreferences("favorites", MODE_PRIVATE)
         val jsonMovies = sharedPreferences.getString("favorite_movies",null)
