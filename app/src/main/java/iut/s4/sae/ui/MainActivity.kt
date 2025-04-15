@@ -9,12 +9,14 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.search.SearchBar
 import com.google.android.material.search.SearchView
 import iut.s4.sae.R
+import iut.s4.sae.SettingsManager
 import iut.s4.sae.model.Movies
 import iut.s4.sae.network.MovieDao
 import kotlinx.coroutines.runBlocking
@@ -22,6 +24,10 @@ import kotlinx.serialization.json.Json
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
+    val allowAdult : Boolean
+        get() = SettingsManager.isAdultContentAllowed(this)
+    val language : String
+        get() = SettingsManager.getPreferredLanguage(this)
     val currentFragment : Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.commit {
             runBlocking {
                 replace(R.id.main_movie_list_fragment_view, TrendingMoviesFragment.newInstance(
-                    MovieDao.getInstance().fetchTrendingMovies(), MovieDao.getInstance().fetchGenres()))
+                    MovieDao.getInstance().fetchTrendingMovies(language=language), MovieDao.getInstance().fetchGenres(language)))
             }
         }
 
@@ -79,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.commit {
                         runBlocking {
                             replace(R.id.main_movie_list_fragment_view, TrendingMoviesFragment.newInstance(
-                                MovieDao.getInstance().fetchTrendingMovies(), MovieDao.getInstance().fetchGenres()))
+                                MovieDao.getInstance().fetchTrendingMovies(language = language), MovieDao.getInstance().fetchGenres(language)))
                         }
                     }
                     true
@@ -130,6 +136,13 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun attachBaseContext(newBase: Context) {
+        val sharedPreferences = newBase.getSharedPreferences("language", MODE_PRIVATE)
+        val lang = sharedPreferences.getString("language_preference", "") ?: "en"
+        super.attachBaseContext(LanguageContextWrapper.wrap(newBase, lang))
+    }
+
+
     fun getFavoriteMovie(context : Context) : Movies {
         val sharedPreferences : SharedPreferences = context.getSharedPreferences("favorites", MODE_PRIVATE)
         val jsonMovies = sharedPreferences.getString("favorite_movies",null)
@@ -143,7 +156,7 @@ class MainActivity : AppCompatActivity() {
     fun searchMovie(searchTerm: String) {
         val intent = Intent(this, SearchActivity::class.java)
         val movies = runBlocking {
-            MovieDao.getInstance().searchMovies(searchTerm)
+            MovieDao.getInstance().searchMovies(searchTerm, language=language, includeAdult = allowAdult)
         }
         intent
             .putExtra(SearchActivity.MOVIES_ARGUMENT, movies)

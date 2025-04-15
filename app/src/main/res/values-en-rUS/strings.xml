@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AnbyMovie</string>
+    <string name="search_movies">Search Movies</string>
+    <string name="in_app_name">anby</string>
+    <string name="search_movies_action">Discover</string>
+    <string name="base_actions">Actions</string>
+    <string name="favourite_movies">Favorites</string>
+    <string name="settings">Settings</string>
+    <string name="search_movie_title">Movie Title</string>
+    <string name="search_movie_type">Genre</string>
+    <string name="advanced_search">Advanced Search</string>
+    <string name="history">History</string>
+    <string name="clear_history">Clear History</string>
+    <string name="setting_allow_adult_content">Allow Adult Content</string>
+    <string name="setting_preferred_language">Language</string>
+    <string name="warning_invalid_search">The entered search is invalid.</string>
+    <string name="trending_movies_header">Trending</string>
+    <string name="trending_filter_daily">Today</string>
+    <string name="trending_filter_weekly">This Week</string>
+    <string name="movie_poster">Movie Poster</string>
+    <string name="release_date">Release Date</string>
+    <string name="genre">Genre</string>
+    <string name="title">Title</string>
+    <string name="movie_genres_header">Genres</string>
+    <string name="no_favorite_movies">There are currently no favorite movies</string>
+    <string name="no_favorite_movies_description">There are currently no favorite movies</string>
+    <string name="reload_for_language_changes">Pour que les modifications prennent effet, veuillez redémarrer l\'application</string>
+    <string-array name="language">
+        <item>Français</item>
+        <item>English</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>fr</item>
+        <item>en</item>
+    </string-array>
+</resources>

@@ -1,5 +1,6 @@
 package iut.s4.sae.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -52,6 +53,12 @@ class SearchActivity : AppCompatActivity() {
             startActivity(intent)
         }
         results.layoutManager = LinearLayoutManager(this)
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        val sharedPreferences = newBase.getSharedPreferences("language", MODE_PRIVATE)
+        val lang = sharedPreferences.getString("language_preference", "") ?: "en"
+        super.attachBaseContext(LanguageContextWrapper.wrap(newBase, lang))
     }
 
     companion object {

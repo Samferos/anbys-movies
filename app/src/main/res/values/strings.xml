@@ -10,28 +10,31 @@
     <string name="search_movie_type">Genre</string>
     <string name="advanced_search">Recherche avancée</string>
     <string name="history">Historique</string>
-    <string name="clear_history">Effacer Historique</string>
-    <string name="setting_allow_adult_content">Autoriser le contenu pour adulte</string>
+    <string name="clear_history">Effacer l\'historique</string>
+    <string name="setting_allow_adult_content">Autoriser le contenu pour adultes</string>
     <string name="setting_preferred_language">Langue</string>
-    <string name="warning_invalid_search">La recherche rentrée est invalide.</string>
+    <string name="warning_invalid_search">La recherche entrée est invalide.</string>
     <string name="trending_movies_header">Tendances</string>
     <string name="trending_filter_daily">Du jour</string>
     <string name="trending_filter_weekly">De la semaine</string>
-    <string name="movie_poster">Movie Poster</string>
-    <string name="release_date">Release Date</string>
+    <string name="movie_poster">Affiche du film</string>
+    <string name="release_date">Date de sortie</string>
     <string name="genre">Genre</string>
-    <string name="title">Title</string>
+    <string name="title">Titre</string>
     <string name="movie_genres_header">Genres</string>
     <string name="search_filter_by_order">Par Ordre</string>
     <string name="search_filter_by_popularity">Par Popularité</string>
     <string name="search_filter_by_year">Par Année</string>
     <string name="search_no_movies_found">Aucun film n\'a été trouvé à partir de la recherche donnée.</string>
+    <string name="no_favorite_movies">Il n\'y a actuellement aucun film favori</string>
+    <string name="no_favorite_movies_description">Il n\'y a actuellement aucun film favori</string>
+    <string name="reload_for_language_changes">For the changes to take effect, kindly restart the application</string>
     <string-array name="language">
         <item>Français</item>
         <item>English</item>
     </string-array>
     <string-array name="language_values">
         <item>fr</item>
-        <item>en_US</item>
+        <item>en</item>
     </string-array>
 </resources>

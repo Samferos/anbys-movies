@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +26,7 @@ import kotlin.math.roundToLong
 import androidx.core.content.edit
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import iut.s4.sae.SettingsManager
 import kotlinx.serialization.encodeToString
 
 
@@ -41,6 +43,11 @@ class MovieDetailActivity : AppCompatActivity() {
     private lateinit var carousel : RecyclerView
     private lateinit var floatingButtonAddFavorite : FloatingActionButton
     private var isFavorite : Boolean = false
+
+    val allowAdult : Boolean
+        get()=SettingsManager.isAdultContentAllowed(this)
+    val language : String
+        get()=SettingsManager.getPreferredLanguage(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,8 +83,10 @@ class MovieDetailActivity : AppCompatActivity() {
         overviewTextView = findViewById(R.id.movie_detail_overview)
         carousel = findViewById(R.id.movie_detail_carousel)
 
+
+
         runBlocking {
-            movie = MovieDao.getInstance().searchMovieDetails(movieId.toString())
+            movie = MovieDao.getInstance().searchMovieDetails(movieId.toString(), language)
         }
 
         Picasso.get().load("https://image.tmdb.org/t/p/original${movie?.backdropPath}")
@@ -99,7 +108,7 @@ class MovieDetailActivity : AppCompatActivity() {
         val similarMovie : Movies
 
         runBlocking {
-            similarMovie = MovieDao.getInstance().fetchSimilarMovies(movieId)
+            similarMovie = MovieDao.getInstance().fetchSimilarMovies(movieId, language = language)
         }
 
         val similarMovieAdapter = SimilarMovieAdapter(similarMovie ?: Movies(listOf())) { position ->
@@ -126,6 +135,12 @@ class MovieDetailActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        val sharedPreferences = newBase.getSharedPreferences("language", MODE_PRIVATE)
+        val lang = sharedPreferences.getString("language_preference", "") ?: "en"
+        super.attachBaseContext(LanguageContextWrapper.wrap(newBase, lang))
     }
 
     private fun formatRuntime(runtimeInMinutes: Int?): String {
