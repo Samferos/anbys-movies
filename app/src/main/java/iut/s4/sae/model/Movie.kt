@@ -17,11 +17,11 @@ data class Movie(
     @SerialName("original_language") val originalLanguage: String? = null,
     @SerialName("original_title") val originalTitle: String? = null,
     val overview: String? = null,
-    val popularity: Double,
+    val popularity: Double? = null,
     @SerialName("poster_path") val posterPath: String? = null,
     @SerialName("release_date") val releaseDate: String? = null,
     val title: String,
-    val video: Boolean,
+    val video: Boolean? = null,
     @SerialName("vote_average") val voteAverage: Double? = null,
     @SerialName("vote_count") val voteCount: Int? = null,
     @SerialName("runtime") val runtime: Int? = null

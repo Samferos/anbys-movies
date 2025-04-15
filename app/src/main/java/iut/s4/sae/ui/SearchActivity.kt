@@ -33,42 +33,46 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        val searchTerm = intent.getStringExtra(SEARCH_TERM_ARGUMENT) ?: ""
+        val genreId = intent.getIntExtra("genre_id", -1)
+        val genreName = intent.getStringExtra("genre_name")
+        val searchTerm = intent.getStringExtra(SEARCH_TERM_ARGUMENT)
 
-        appbar.title = searchTerm
+        val movieResults = runBlocking {
+            val language = SettingsManager.getPreferredLanguage(this@SearchActivity)
+            val allowAdult = SettingsManager.isAdultContentAllowed(this@SearchActivity)
 
-        var movieResults = runBlocking {
-            MovieDao.getInstance().searchMovies(
-                searchTerm,
-                currentPage,
-                SettingsManager.getPreferredLanguage(this@SearchActivity),
-                SettingsManager.isAdultContentAllowed(this@SearchActivity)
-            )
+            when {
+                genreId != -1 -> {
+                    appbar.title=genreName
+                    MovieDao.getInstance().discoverByGenre(genreId, language=language, includeAdult = allowAdult)
+                }
+                !searchTerm.isNullOrBlank() -> {
+                    appbar.title = searchTerm
+                    Log.d("test",searchTerm)
+                    MovieDao.getInstance().searchMovies(searchTerm, currentPage, language, allowAdult)
+                }
+                else -> {
+                    // fallback, nothing to show
+                    null
+                }
+            }
         }
-
-        if (movieResults.results.isEmpty()) {
-            val filters = findViewById<ChipGroup>(R.id.search_chip_group)
-            filters.visibility = View.GONE
-            val noResultsTextView = findViewById<TextView>(R.id.search_no_movies_found)
-            noResultsTextView.visibility = View.VISIBLE
+        if (movieResults == null || movieResults.results.isEmpty()) {
+            findViewById<ChipGroup>(R.id.search_chip_group).visibility = View.GONE
+            findViewById<TextView>(R.id.search_no_movies_found).visibility = View.VISIBLE
             return
         }
-        // Nothing runs after the previous if statement, if no movies are found.
 
         val results = findViewById<RecyclerView>(R.id.search_results_view)
-
-        val resultsLayoutManager = LinearLayoutManager(this)
-        val resultsMoviesAdapter = FavoriteMoviesAdapter(movieResults) {
-            position ->
+        results.layoutManager = LinearLayoutManager(this)
+        results.adapter = FavoriteMoviesAdapter(movieResults) { position ->
             val id = movieResults.results[position].id
             val intent = Intent(this, MovieDetailActivity::class.java)
                 .putExtra("movie_id", id)
             startActivity(intent)
         }
-
-        results.layoutManager = resultsLayoutManager
-        results.adapter = resultsMoviesAdapter
     }
+
 
     override fun attachBaseContext(newBase: Context) {
         val sharedPreferences = newBase.getSharedPreferences("language", MODE_PRIVATE)

@@ -9,15 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import iut.s4.sae.R
 import iut.s4.sae.model.Genres
 
-class GenreAdapter(private val genres: Genres) : RecyclerView.Adapter<GenreAdapter.ViewHolder>() {
-    class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
+class GenreAdapter(
+    private val genres: Genres,
+    private val onGenreClick: (Int) -> Unit
+) : RecyclerView.Adapter<GenreAdapter.ViewHolder>() {
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.genre_entry_title)
-    }
-
-    override fun getItemCount(): Int = genres.genres.size
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.title.text = genres.genres[position].name
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,5 +24,12 @@ class GenreAdapter(private val genres: Genres) : RecyclerView.Adapter<GenreAdapt
         return ViewHolder(view)
     }
 
-    override fun getItemId(position: Int) = genres.genres[position].id.toLong()
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.title.text = genres.genres[position].name
+        holder.itemView.setOnClickListener {
+            onGenreClick(genres.genres[position].id)
+        }
+    }
+
+    override fun getItemCount(): Int = genres.genres.size
 }

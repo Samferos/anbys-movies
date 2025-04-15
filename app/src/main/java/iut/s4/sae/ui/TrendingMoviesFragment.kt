@@ -90,7 +90,15 @@ class TrendingMoviesFragment : Fragment() {
         }
 
         val genreList = view.findViewById<RecyclerView>(R.id.trending_movies_fragment_genres)
-        val genreListAdapter = GenreAdapter(movieGenres ?: Genres(listOf()))
+        val genreListAdapter = GenreAdapter(movieGenres ?: Genres(listOf())) { genreId ->
+            val genre = movieGenres?.genres?.find { it.id == genreId }
+            val intent = Intent(requireContext(), SearchActivity::class.java).apply {
+                putExtra("genre_id", genreId)
+                putExtra("genre_name", genre?.name ?: "Genre")
+            }
+            startActivity(intent)
+        }
+
         val genreListLayoutManager = GridLayoutManager(this.context, 2)
         genreList.adapter = genreListAdapter
         genreList.layoutManager = genreListLayoutManager
