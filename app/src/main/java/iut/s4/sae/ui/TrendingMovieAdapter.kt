@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.carousel.MaskableFrameLayout
 import com.squareup.picasso.Picasso
 import iut.s4.sae.R
 import iut.s4.sae.model.Movies
@@ -20,13 +21,13 @@ class TrendingMovieAdapter(private var movies: Movies, private val onItemClick: 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): TrendingMovieAdapter.ViewHolder {
+    ): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.trending_movie_entry, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: TrendingMovieAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.title.text = movies.results[position].title
         if (movies.results[position].backdropPath == null) {
             holder.poster.setImageResource(R.drawable.media)
@@ -36,6 +37,10 @@ class TrendingMovieAdapter(private var movies: Movies, private val onItemClick: 
         }
         holder.itemView.setOnClickListener{
             onItemClick(position)
+        }
+        (holder.itemView as MaskableFrameLayout).setOnMaskChangedListener {
+            maskRect ->
+            holder.title.translationX = maskRect.left
         }
     }
 

@@ -111,9 +111,9 @@ class MovieDetailActivity : AppCompatActivity() {
             similarMovie = MovieDao.getInstance().fetchSimilarMovies(movieId, language = language)
         }
 
-        val similarMovieAdapter = SimilarMovieAdapter(similarMovie ?: Movies(listOf())) { position ->
+        val similarMovieAdapter = TrendingMovieAdapter(similarMovie ?: Movies(listOf())) { position ->
             val clickedMovie = similarMovie.results[position]
-            val _movieId = clickedMovie.id ?: return@SimilarMovieAdapter
+            val _movieId = clickedMovie.id ?: return@TrendingMovieAdapter
             val intent = Intent(this, MovieDetailActivity::class.java).apply {
                 putExtra("movie_id", _movieId)
             }

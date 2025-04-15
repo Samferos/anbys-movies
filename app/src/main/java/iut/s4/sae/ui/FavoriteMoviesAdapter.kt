@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.edit
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
 import com.squareup.picasso.Picasso
 import iut.s4.sae.R
 import iut.s4.sae.model.Movies
@@ -22,6 +23,7 @@ class FavoriteMoviesAdapter(private var movies : Movies, private val onItemClick
         var genre : TextView = view.findViewById(R.id.tv_movie_genre)
         var releaseDate : TextView = view.findViewById(R.id.tv_movie_release_date)
         var poster : ImageView = view.findViewById(R.id.iv_movie_poster)
+        var adultTag : Chip = view.findViewById(R.id.tv_movie_adult_tag)
     }
 
 
@@ -41,6 +43,7 @@ class FavoriteMoviesAdapter(private var movies : Movies, private val onItemClick
         holder.title.text = movies.results[position].title
         holder.genre.text = movies.results[position].genres.joinToString(separator = " · ") { it.name }
         holder.releaseDate.text = movies.results[position].releaseDate
+        holder.adultTag.visibility = if (movies.results[position].adult) View.VISIBLE else View.GONE
         if (movies.results[position].backdropPath == null) {
             holder.poster.setImageResource(R.drawable.media)
         } else {
@@ -55,6 +58,12 @@ class FavoriteMoviesAdapter(private var movies : Movies, private val onItemClick
     fun updateMovies(newMovies: Movies) {
         movies = newMovies
         notifyDataSetChanged()
+    }
+
+    fun addMovies(moviesToAdd : Movies) {
+        val originalSize = movies.results.size
+        movies = Movies(movies.results + moviesToAdd.results)
+        notifyItemRangeInserted(originalSize, moviesToAdd.results.size)
     }
 
     fun removeMovie(context : Context, position: Int) {

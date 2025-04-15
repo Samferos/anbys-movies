@@ -35,6 +35,14 @@
                 android:layout_width="wrap_content"
                 android:text="@string/release_date"
                 android:textAppearance="?attr/textAppearanceBodySmall"/>
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_movie_adult_tag"
+                android:text="@string/adult_tag"
+                app:chipBackgroundColor="?attr/colorErrorContainer"
+                android:textColor="?attr/colorOnErrorContainer"
+                style="@style/Widget.Material3.Chip.Filter.Elevated"/>
         </LinearLayout>
         <FrameLayout
             android:layout_height="200dp"

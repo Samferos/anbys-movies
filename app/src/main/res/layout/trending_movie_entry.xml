@@ -24,8 +24,8 @@
             android:id="@+id/trending_movie_entry_title"
             android:padding="8dp"
             android:background="?attr/scrimBackground"
-            android:textColor="?attr/colorOnSurface"
-            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textColor="@color/white"
+            android:textAppearance="?attr/textAppearanceTitleSmall"
             android:textAlignment="center"
             android:layout_gravity="bottom"
             tools:ignore="RtlCompat"/>

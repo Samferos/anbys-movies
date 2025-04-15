@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.TrendingMoviesFragment"
     android:padding="16dp"
@@ -37,7 +37,7 @@
         android:id="@+id/trending_movies_fragment_carousel"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:padding="8dp">
+        android:paddingVertical="8dp">
     </androidx.recyclerview.widget.RecyclerView>
 
     <TextView
@@ -46,16 +46,11 @@
         android:layout_marginBottom="8dp"
         android:textAppearance="?attr/textAppearanceDisplaySmall"
         android:text="@string/movie_genres_header"/>
+
     <!-- Genres -->
-    <GridView
-        android:numColumns="2"
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:horizontalSpacing="6dp"
-        android:verticalSpacing="6dp"
-        android:scrollbars="none"
-        android:isScrollContainer="false"
-        android:nestedScrollingEnabled="false"
         android:id="@+id/trending_movies_fragment_genres">
-    </GridView>
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>
