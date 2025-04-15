@@ -55,7 +55,7 @@ class MovieDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_movie_detail)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, 0, systemBars.right, systemBars.bottom)
             insets
         }
         floatingButtonAddFavorite = findViewById(R.id.floating_action_button_add_favorite)
@@ -111,9 +111,9 @@ class MovieDetailActivity : AppCompatActivity() {
             similarMovie = MovieDao.getInstance().fetchSimilarMovies(movieId, language = language)
         }
 
-        val similarMovieAdapter = SimilarMovieAdapter(similarMovie ?: Movies(listOf())) { position ->
+        val similarMovieAdapter = TrendingMovieAdapter(similarMovie ?: Movies(listOf())) { position ->
             val clickedMovie = similarMovie.results[position]
-            val _movieId = clickedMovie.id ?: return@SimilarMovieAdapter
+            val _movieId = clickedMovie.id ?: return@TrendingMovieAdapter
             val intent = Intent(this, MovieDetailActivity::class.java).apply {
                 putExtra("movie_id", _movieId)
             }

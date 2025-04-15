@@ -5,21 +5,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import iut.s4.sae.R
 import iut.s4.sae.model.Genres
 
-class GenreAdapter(private val genres: Genres) : BaseAdapter() {
-    override fun getCount() = genres.genres.size
+class GenreAdapter(private val genres: Genres) : RecyclerView.Adapter<GenreAdapter.ViewHolder>() {
+    class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
+        val title: TextView = view.findViewById(R.id.genre_entry_title)
+    }
 
-    override fun getItem(position: Int) = genres.genres[position]
+    override fun getItemCount(): Int = genres.genres.size
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.title.text = genres.genres[position].name
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.genre_entry, parent, false)
+        return ViewHolder(view)
+    }
 
     override fun getItemId(position: Int) = genres.genres[position].id.toLong()
-
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view = convertView ?: LayoutInflater.from(parent?.context)
-            .inflate(R.layout.genre_entry, parent, false)
-        val title = view.findViewById<TextView>(R.id.genre_entry_title)
-        title.text = genres.genres[position].name
-        return view
-    }
 }

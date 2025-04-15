@@ -157,13 +157,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun searchMovie(searchTerm: String) {
+    private fun searchMovie(searchTerm: String) {
         val intent = Intent(this, SearchActivity::class.java)
-        val movies = runBlocking {
-            MovieDao.getInstance().searchMovies(searchTerm, language=language, includeAdult = allowAdult)
-        }
         intent
-            .putExtra(SearchActivity.MOVIES_ARGUMENT, movies)
             .putExtra(SearchActivity.SEARCH_TERM_ARGUMENT, searchTerm)
         startActivity(intent)
     }

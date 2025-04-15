@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.chip.Chip
@@ -89,9 +89,11 @@ class TrendingMoviesFragment : Fragment() {
             trendingMovieAdapter.updateMovies(trendingMovies ?: Movies(listOf()))
         }
 
-        val genreList = view.findViewById<AdapterView<GenreAdapter>>(R.id.trending_movies_fragment_genres)
+        val genreList = view.findViewById<RecyclerView>(R.id.trending_movies_fragment_genres)
         val genreListAdapter = GenreAdapter(movieGenres ?: Genres(listOf()))
+        val genreListLayoutManager = GridLayoutManager(this.context, 2)
         genreList.adapter = genreListAdapter
+        genreList.layoutManager = genreListLayoutManager
     }
 
     companion object {

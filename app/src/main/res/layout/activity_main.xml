@@ -11,14 +11,13 @@
         android:layout_height="match_parent"
         android:background="?attr/colorSurface"
         android:fillViewport="true"
+        android:paddingBottom="100dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <androidx.fragment.app.FragmentContainerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/main_movie_list_fragment_view">
-        </androidx.fragment.app.FragmentContainerView>
-
+            <androidx.fragment.app.FragmentContainerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/main_movie_list_fragment_view">
+            </androidx.fragment.app.FragmentContainerView>
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -33,6 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top"
+        app:statusBarForeground="?attr/colorSurface"
         app:liftOnScroll="true"
         android:fitsSystemWindows="true">
         <com.google.android.material.search.SearchBar
