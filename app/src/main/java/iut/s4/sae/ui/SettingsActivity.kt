@@ -4,10 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.preference.SwitchPreference
-import com.google.android.material.materialswitch.MaterialSwitch
 import androidx.fragment.app.FragmentTransaction
 import iut.s4.sae.R
+import iut.s4.sae.SettingsManager
 
 class SettingsActivity() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +30,7 @@ class SettingsActivity() : AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        val sharedPreferences = newBase.getSharedPreferences("language", MODE_PRIVATE)
-        val lang = sharedPreferences.getString("language_preference", "") ?: "en"
+        val lang = SettingsManager.getPreferredLanguage(newBase)
         super.attachBaseContext(LanguageContextWrapper.wrap(newBase, lang))
     }
 

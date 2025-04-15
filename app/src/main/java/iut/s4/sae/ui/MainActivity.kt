@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -40,10 +39,16 @@ class MainActivity : AppCompatActivity() {
         val searchView = findViewById<SearchView>(R.id.main_search_view)
 
         // Set fragment to trending movies by default
-        supportFragmentManager.commit {
-            runBlocking {
-                replace(R.id.main_movie_list_fragment_view, TrendingMoviesFragment.newInstance(
-                    MovieDao.getInstance().fetchTrendingMovies(language=language), MovieDao.getInstance().fetchGenres(language)))
+        if (savedInstanceState == null) {
+            supportFragmentManager.commit {
+                runBlocking {
+                    replace(
+                        R.id.main_movie_list_fragment_view, TrendingMoviesFragment.newInstance(
+                            MovieDao.getInstance().fetchTrendingMovies(language = language),
+                            MovieDao.getInstance().fetchGenres(language)
+                        )
+                    )
+                }
             }
         }
 
@@ -137,8 +142,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        val sharedPreferences = newBase.getSharedPreferences("language", MODE_PRIVATE)
-        val lang = sharedPreferences.getString("language_preference", "") ?: "en"
+        val lang = SettingsManager.getPreferredLanguage(newBase)
         super.attachBaseContext(LanguageContextWrapper.wrap(newBase, lang))
     }
 
