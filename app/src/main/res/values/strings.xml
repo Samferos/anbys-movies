@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AnbyMovie</string>
+    <string name="app_name">Anby\'s Movies</string>
     <string name="search_movies">Rechercher des films</string>
     <string name="in_app_name">anby</string>
     <string name="search_movies_action">Découvrir</string>
@@ -22,6 +22,10 @@
     <string name="genre">Genre</string>
     <string name="title">Title</string>
     <string name="movie_genres_header">Genres</string>
+    <string name="search_filter_by_order">Par Ordre</string>
+    <string name="search_filter_by_popularity">Par Popularité</string>
+    <string name="search_filter_by_year">Par Année</string>
+    <string name="search_no_movies_found">Aucun film n\'a été trouvé à partir de la recherche donnée.</string>
     <string-array name="language">
         <item>Français</item>
         <item>English</item>
