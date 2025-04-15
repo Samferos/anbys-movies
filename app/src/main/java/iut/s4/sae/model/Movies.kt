@@ -6,4 +6,4 @@ import kotlinx.serialization.Serializable
 
 @Parcelize
 @Serializable
-data class Movies(val results: List<Movie>) : Parcelable
+data class Movies(val results: MutableList<Movie>) : Parcelable

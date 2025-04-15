@@ -67,7 +67,7 @@ class MovieDao private constructor(){
 
             return Movies(response.results)
         } catch (e: Exception) {
-            return Movies(emptyList())
+            return Movies(mutableListOf())
         }
     }
 
@@ -89,7 +89,7 @@ class MovieDao private constructor(){
             }.body()
             return response
         } catch (e: Exception){
-            return Movies(emptyList())
+            return Movies(mutableListOf())
         }
     }
 

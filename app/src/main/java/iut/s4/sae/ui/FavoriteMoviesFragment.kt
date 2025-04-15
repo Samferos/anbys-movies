@@ -39,7 +39,7 @@ class FavoriteMoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerViewFavoriteMovies = view.findViewById<RecyclerView>(R.id.recycler_view_favorite_movie)
-        val favoriteMoviesAdapter = FavoriteMoviesAdapter(favoriteMovies ?: Movies(listOf())) {position ->
+        val favoriteMoviesAdapter = FavoriteMoviesAdapter(favoriteMovies ?: Movies(mutableListOf())) { position ->
             val clickedMovie = favoriteMovies?.results?.get(position)
             val movieId = clickedMovie?.id ?: return@FavoriteMoviesAdapter
             val intent = Intent(requireContext(), MovieDetailActivity::class.java).apply {

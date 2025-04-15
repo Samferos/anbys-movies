@@ -111,7 +111,7 @@ class MovieDetailActivity : AppCompatActivity() {
             similarMovie = MovieDao.getInstance().fetchSimilarMovies(movieId, language = language)
         }
 
-        val similarMovieAdapter = TrendingMovieAdapter(similarMovie ?: Movies(listOf())) { position ->
+        val similarMovieAdapter = TrendingMovieAdapter(similarMovie ?: Movies(mutableListOf())) { position ->
             val clickedMovie = similarMovie.results[position]
             val _movieId = clickedMovie.id ?: return@TrendingMovieAdapter
             val intent = Intent(this, MovieDetailActivity::class.java).apply {
@@ -159,7 +159,7 @@ class MovieDetailActivity : AppCompatActivity() {
         val movies = if (jsonMovies != null) {
             Json.decodeFromString<Movies>(jsonMovies)
         } else {
-            Movies(emptyList())
+            Movies(mutableListOf())
         }
 
         val updatedMovies = if (isFavorite) {
@@ -169,7 +169,7 @@ class MovieDetailActivity : AppCompatActivity() {
         }
         isFavorite = !isFavorite
         sharedPreferences.edit() {
-            val updatedJson = Json.encodeToString(Movies(updatedMovies))
+            val updatedJson = Json.encodeToString(Movies(updatedMovies.toMutableList()))
             putString("favorite_movies", updatedJson)
         }
     }

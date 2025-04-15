@@ -153,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         return if (jsonMovies != null) {
             Json.decodeFromString<Movies>(jsonMovies)
         } else {
-            Movies(listOf())
+            Movies(mutableListOf())
         }
     }
 

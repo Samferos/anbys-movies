@@ -62,14 +62,14 @@ class FavoriteMoviesAdapter(private var movies : Movies, private val onItemClick
 
     fun addMovies(moviesToAdd : Movies) {
         val originalSize = movies.results.size
-        movies = Movies(movies.results + moviesToAdd.results)
+        movies.results.addAll(moviesToAdd.results)
         notifyItemRangeInserted(originalSize, moviesToAdd.results.size)
     }
 
     fun removeMovie(context : Context, position: Int) {
         val newList = movies.results.toMutableList()
         newList.removeAt(position)
-        val updatedMovies = Movies(newList.toList())
+        val updatedMovies = Movies(newList.toMutableList())
         updateMovies(updatedMovies)
         notifyItemRemoved(position)
 

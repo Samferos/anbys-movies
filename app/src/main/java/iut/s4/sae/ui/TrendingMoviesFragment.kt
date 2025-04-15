@@ -55,7 +55,7 @@ class TrendingMoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val carousel = view.findViewById<RecyclerView>(R.id.trending_movies_fragment_carousel)
-        val trendingMovieAdapter = TrendingMovieAdapter(trendingMovies ?: Movies(listOf())) {position ->
+        val trendingMovieAdapter = TrendingMovieAdapter(trendingMovies ?: Movies(mutableListOf())) { position ->
             val clickedMovie = trendingMovies?.results?.get(position)
             val movieId = clickedMovie?.id ?: return@TrendingMovieAdapter
             val intent = Intent(requireContext(), MovieDetailActivity::class.java).apply {
@@ -77,7 +77,7 @@ class TrendingMoviesFragment : Fragment() {
             runBlocking {
                 trendingMovies = MovieDao.getInstance().fetchTrendingMovies("day", language)
             }
-            trendingMovieAdapter.updateMovies(trendingMovies ?: Movies(listOf()))
+            trendingMovieAdapter.updateMovies(trendingMovies ?: Movies(mutableListOf()))
         }
 
         trendingFilterWeekly.setOnClickListener {
@@ -86,7 +86,7 @@ class TrendingMoviesFragment : Fragment() {
             runBlocking {
                 trendingMovies = MovieDao.getInstance().fetchTrendingMovies("week", language)
             }
-            trendingMovieAdapter.updateMovies(trendingMovies ?: Movies(listOf()))
+            trendingMovieAdapter.updateMovies(trendingMovies ?: Movies(mutableListOf()))
         }
 
         val genreList = view.findViewById<RecyclerView>(R.id.trending_movies_fragment_genres)
