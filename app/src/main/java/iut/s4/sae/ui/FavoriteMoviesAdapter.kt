@@ -62,11 +62,6 @@ class FavoriteMoviesAdapter(private var movies : Movies = Movies(mutableListOf()
         }
     }
 
-    fun updateMovies(newMovies: Movies) {
-        movies = newMovies
-        notifyDataSetChanged()
-    }
-
     fun addMovies(moviesToAdd : Movies) {
         val originalSize = movies.results.size
         movies.results.addAll(moviesToAdd.results)
@@ -74,10 +69,7 @@ class FavoriteMoviesAdapter(private var movies : Movies = Movies(mutableListOf()
     }
 
     fun removeMovie(context : Context, position: Int) {
-        val newList = movies.results.toMutableList()
-        newList.removeAt(position)
-        val updatedMovies = Movies(newList.toMutableList())
-        updateMovies(updatedMovies)
+        movies.results.removeAt(position)
         notifyItemRemoved(position)
 
         // i thought, why the hell would this function need context ?
@@ -86,7 +78,7 @@ class FavoriteMoviesAdapter(private var movies : Movies = Movies(mutableListOf()
         // FIXME
         val sharedPreferences = context.getSharedPreferences("favorites", MODE_PRIVATE)
         sharedPreferences.edit() {
-            val updatedJson = Json.encodeToString(updatedMovies)
+            val updatedJson = Json.encodeToString(movies)
             putString("favorite_movies", updatedJson)
         }
     }
