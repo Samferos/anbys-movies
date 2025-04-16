@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:contentPadding="8dp"
+    app:cardCornerRadius="16dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -17,12 +18,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingEnd="8dp"
+            android:layout_gravity="top"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/tv_movie_title"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="@string/title"/>
+                android:text="@string/title"
+                android:textAppearance="?attr/textAppearanceTitleMedium"/>
             <TextView
                 android:id="@+id/tv_movie_genre"
                 android:layout_height="wrap_content"
@@ -43,6 +46,12 @@
                 app:chipBackgroundColor="?attr/colorErrorContainer"
                 android:textColor="?attr/colorOnErrorContainer"
                 style="@style/Widget.Material3.Chip.Filter.Elevated"/>
+            <TextView
+                android:id="@+id/tv_movie_description"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="Description"
+                android:textAppearance="?attr/textAppearanceBodySmall"/>
         </LinearLayout>
         <FrameLayout
             android:layout_height="243dp"

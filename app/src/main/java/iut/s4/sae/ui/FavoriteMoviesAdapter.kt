@@ -24,6 +24,7 @@ class FavoriteMoviesAdapter(private var movies : Movies = Movies(mutableListOf()
         var releaseDate : TextView = view.findViewById(R.id.tv_movie_release_date)
         var poster : ImageView = view.findViewById(R.id.iv_movie_poster)
         var adultTag : Chip = view.findViewById(R.id.tv_movie_adult_tag)
+        var description : TextView = view.findViewById(R.id.tv_movie_description)
     }
 
 
@@ -44,6 +45,12 @@ class FavoriteMoviesAdapter(private var movies : Movies = Movies(mutableListOf()
         holder.genre.text = movies.results[position].genres.joinToString(separator = " · ") { it.name }
         holder.releaseDate.text = movies.results[position].releaseDate
         holder.adultTag.visibility = if (movies.results[position].adult) View.VISIBLE else View.GONE
+        holder.description.text = movies.results[position].overview.let {
+            if ((it?.length ?: 0) > 200)
+                it?.slice(0..200) + "..."
+            else
+                it
+        }
         if (movies.results[position].posterPath != null) {
             val image = Picasso.get().load("https://image.tmdb.org/t/p/original${movies.results[position].posterPath}")
                 .into(holder.poster)

@@ -132,13 +132,13 @@
                 <TextView
                     android:id="@+id/movie_detail_genre"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="genres" />
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/movie_detail_overview_containter"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginHorizontal="16dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="@+id/movie_detail_poster"
@@ -147,7 +147,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Overview"
+                    android:text="@string/overview"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@+id/movie_detail_poster"
@@ -156,7 +156,7 @@
                 <!-- Overview -->
                 <TextView
                     android:id="@+id/movie_detail_overview"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="overview content" />
 
@@ -199,5 +199,5 @@
         android:contentDescription="TODO"
         android:src="@drawable/baseline_favorite_border_24"
         android:layout_gravity="bottom|end"
-        android:layout_margin="8dp"/>
+        android:layout_margin="16dp"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

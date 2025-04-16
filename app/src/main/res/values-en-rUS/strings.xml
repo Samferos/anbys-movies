@@ -26,6 +26,7 @@
     <string name="no_favorite_movies">There are currently no favorite movies</string>
     <string name="no_favorite_movies_description">There are currently no favorite movies</string>
     <string name="reload_for_language_changes">Pour que les modifications prennent effet, veuillez redémarrer l\'application</string>
+    <string name="overview">Overview</string>
     <string-array name="language">
         <item>Français</item>
         <item>English</item>

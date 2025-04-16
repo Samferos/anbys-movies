@@ -16,6 +16,8 @@ import com.google.android.material.search.SearchBar
 import com.google.android.material.search.SearchView
 import iut.s4.sae.R
 import iut.s4.sae.SettingsManager
+import iut.s4.sae.action.ACTION_SEARCH_BY_GENRE
+import iut.s4.sae.action.ACTION_SEARCH_BY_MOVIE
 import iut.s4.sae.model.Movies
 import iut.s4.sae.network.MovieDao
 import kotlinx.coroutines.runBlocking
@@ -27,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         get() = SettingsManager.isAdultContentAllowed(this)
     val language : String
         get() = SettingsManager.getPreferredLanguage(this)
-    val currentFragment : Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,9 +85,6 @@ class MainActivity : AppCompatActivity() {
         bottomBar.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.bottom_bar_movies_menu -> {
-                    if (currentFragment is TrendingMoviesFragment) {
-                        return@setOnItemSelectedListener true
-                    }
                     supportFragmentManager.commit {
                         runBlocking {
                             replace(R.id.main_movie_list_fragment_view, TrendingMoviesFragment.newInstance(
@@ -161,7 +159,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, SearchActivity::class.java)
         intent
             .putExtra(SearchActivity.EXTRA_SEARCH, searchTerm)
-            .action = Intent.ACTION_SEARCH
+            .action = ACTION_SEARCH_BY_MOVIE
         startActivity(intent)
     }
 }

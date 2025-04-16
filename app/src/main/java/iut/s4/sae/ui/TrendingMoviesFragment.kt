@@ -15,6 +15,7 @@ import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.chip.Chip
 import iut.s4.sae.R
 import iut.s4.sae.SettingsManager
+import iut.s4.sae.action.ACTION_SEARCH_BY_GENRE
 import iut.s4.sae.model.Genres
 import iut.s4.sae.model.Movies
 import iut.s4.sae.network.MovieDao
@@ -90,18 +91,24 @@ class TrendingMoviesFragment : Fragment() {
         }
 
         val genreList = view.findViewById<RecyclerView>(R.id.trending_movies_fragment_genres)
-        val genreListAdapter = GenreAdapter(movieGenres ?: Genres(listOf())) { genreId ->
+        val genreListAdapter = GenreAdapter(movieGenres ?: Genres(listOf())) {
+            genreId ->
             val genre = movieGenres?.genres?.find { it.id == genreId }
-            val intent = Intent(requireContext(), SearchActivity::class.java).apply {
-                putExtra("genre_id", genreId)
-                putExtra("genre_name", genre?.name ?: "Genre")
-            }
-            startActivity(intent)
+            searchGenre(genreId, genre?.name ?: "Genre")
         }
 
         val genreListLayoutManager = GridLayoutManager(this.context, 2)
         genreList.adapter = genreListAdapter
         genreList.layoutManager = genreListLayoutManager
+    }
+
+    private fun searchGenre(genreId: Int, genreName: String) {
+        val intent = Intent(this.context, SearchActivity::class.java)
+        intent
+            .putExtra(SearchActivity.EXTRA_GENRE_ID, genreId)
+            .putExtra(SearchActivity.EXTRA_SEARCH, genreName)
+            .action = ACTION_SEARCH_BY_GENRE
+        startActivity(intent)
     }
 
     companion object {
