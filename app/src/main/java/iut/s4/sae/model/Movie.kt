@@ -12,7 +12,7 @@ data class Movie(
     val adult: Boolean,
     @SerialName("backdrop_path") val backdropPath: String? = null,
     @SerialName("genre_ids") val genreIds: List<Int> = emptyList(),
-    @SerialName("genres") val genres: List<Genre> = emptyList(),
+    val genres: List<Genre> = emptyList(),
     val id: Int,
     @SerialName("original_language") val originalLanguage: String? = null,
     @SerialName("original_title") val originalTitle: String? = null,
@@ -24,5 +24,5 @@ data class Movie(
     val video: Boolean? = null,
     @SerialName("vote_average") val voteAverage: Double? = null,
     @SerialName("vote_count") val voteCount: Int? = null,
-    @SerialName("runtime") val runtime: Int? = null
+    val runtime: Int? = null
 ) : Parcelable

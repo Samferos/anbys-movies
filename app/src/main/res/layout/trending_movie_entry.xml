@@ -17,6 +17,7 @@
             android:id="@+id/trending_movie_entry_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:src="@drawable/anby_slam_tv_bw"
             android:scaleType="centerCrop"/>
         <TextView
             android:layout_width="match_parent"

@@ -2,24 +2,29 @@ package iut.s4.sae.ui
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
 import iut.s4.sae.R
 import iut.s4.sae.SettingsManager
-import iut.s4.sae.network.MovieDao
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class SearchActivity : AppCompatActivity() {
 
-    var currentPage = 1
+    private val viewModel : SearchViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,43 +38,65 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        val genreId = intent.getIntExtra("genre_id", -1)
-        val genreName = intent.getStringExtra("genre_name")
-        val searchTerm = intent.getStringExtra(SEARCH_TERM_ARGUMENT)
+        val filterChipGroup = findViewById<ChipGroup>(R.id.search_chip_group)
+        val noMoviesFoundText = findViewById<TextView>(R.id.search_no_movies_found)
 
-        val movieResults = runBlocking {
-            val language = SettingsManager.getPreferredLanguage(this@SearchActivity)
-            val allowAdult = SettingsManager.isAdultContentAllowed(this@SearchActivity)
+        val genreId = intent.getIntExtra(EXTRA_GENREID, 0)
+        val searchText = intent.getStringExtra(EXTRA_SEARCH)
 
-            when {
-                genreId != -1 -> {
-                    appbar.title=genreName
-                    MovieDao.getInstance().discoverByGenre(genreId, language=language, includeAdult = allowAdult)
-                }
-                !searchTerm.isNullOrBlank() -> {
-                    appbar.title = searchTerm
-                    Log.d("test",searchTerm)
-                    MovieDao.getInstance().searchMovies(searchTerm, currentPage, language, allowAdult)
-                }
-                else -> {
-                    // fallback, nothing to show
-                    null
-                }
-            }
+        val language = SettingsManager.getPreferredLanguage(this@SearchActivity)
+        val allowAdult = SettingsManager.isAdultContentAllowed(this@SearchActivity)
+
+        viewModel.apply {
+            includeAdult = allowAdult
+            this.language = language
         }
-        if (movieResults == null || movieResults.results.isEmpty()) {
-            findViewById<ChipGroup>(R.id.search_chip_group).visibility = View.GONE
-            findViewById<TextView>(R.id.search_no_movies_found).visibility = View.VISIBLE
-            return
-        }
+
+        appbar.title = searchText
 
         val results = findViewById<RecyclerView>(R.id.search_results_view)
-        results.layoutManager = LinearLayoutManager(this)
-        results.adapter = FavoriteMoviesAdapter(movieResults) { position ->
-            val id = movieResults.results[position].id
+
+        val resultsLayoutManager = LinearLayoutManager(this)
+        val resultsMoviesAdapter = FavoriteMoviesAdapter {
+            position ->
+            val id = viewModel.moviesResults.results[position].id
             val intent = Intent(this, MovieDetailActivity::class.java)
                 .putExtra("movie_id", id)
             startActivity(intent)
+        }
+
+        // --- Movies Results (RecyclerView) setup
+        results.layoutManager = resultsLayoutManager
+        results.adapter = resultsMoviesAdapter
+        results.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            var lastVisibleItem : Int = 0
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                Log.d(this@SearchActivity::class.simpleName,"Last visible item position : ${resultsLayoutManager.findFirstVisibleItemPosition()} -- ${resultsLayoutManager.findLastVisibleItemPosition()}")
+                if (resultsLayoutManager.findLastVisibleItemPosition() == lastVisibleItem) return
+                if (resultsLayoutManager.findLastVisibleItemPosition() >= viewModel.moviesResults.results.size - 1) {
+                    Log.d(this@SearchActivity::class.simpleName, "Fetching next movie page")
+                    viewModel.nextPage()
+                }
+                lastVisibleItem = resultsLayoutManager.findLastVisibleItemPosition()
+            }
+        })
+
+        lifecycleScope.launch {
+            viewModel.searchMovies(searchText ?: "").join() // Only start collecting, AFTER we have initial movies
+            findViewById<View>(R.id.search_results_loading).visibility = View.GONE
+            if (viewModel.moviesResults.results.isEmpty()) { // If the initial search provided no results.
+                filterChipGroup.visibility = View.GONE
+                noMoviesFoundText.visibility = View.VISIBLE
+                return@launch
+            }
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.newMoviesFlow.collect {
+                    Log.d(this::class.simpleName, "Updating Movies (${it.results.size}) : ${it.results}")
+                    Log.d(this::class.simpleName, "Current Movies (${viewModel.moviesResults.results.size}) : ${viewModel.moviesResults.results}")
+                    resultsMoviesAdapter.addMovies(it)
+                }
+            }
         }
     }
 
@@ -81,6 +108,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val SEARCH_TERM_ARGUMENT = "search_term"
+        const val EXTRA_SEARCH = "iut.s4.sae.EXTRA_SEARCH"
+        const val EXTRA_GENREID = "iut.s4.sae.EXTRA_GENREID"
     }
 }

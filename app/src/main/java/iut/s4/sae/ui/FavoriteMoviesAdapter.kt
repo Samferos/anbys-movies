@@ -16,7 +16,7 @@ import iut.s4.sae.model.Movies
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class FavoriteMoviesAdapter(private var movies : Movies, private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<FavoriteMoviesAdapter.ViewHolder>() {
+class FavoriteMoviesAdapter(private var movies : Movies = Movies(mutableListOf()), private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<FavoriteMoviesAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title : TextView = view.findViewById(R.id.tv_movie_title)
@@ -44,11 +44,11 @@ class FavoriteMoviesAdapter(private var movies : Movies, private val onItemClick
         holder.genre.text = movies.results[position].genres.joinToString(separator = " · ") { it.name }
         holder.releaseDate.text = movies.results[position].releaseDate
         holder.adultTag.visibility = if (movies.results[position].adult) View.VISIBLE else View.GONE
-        if (movies.results[position].backdropPath == null) {
-            holder.poster.setImageResource(R.drawable.media)
-        } else {
-            val image = Picasso.get().load("https://image.tmdb.org/t/p/original${movies.results[position].backdropPath}")
+        if (movies.results[position].posterPath != null) {
+            val image = Picasso.get().load("https://image.tmdb.org/t/p/original${movies.results[position].posterPath}")
                 .into(holder.poster)
+        } else {
+            holder.poster.setImageResource(R.drawable.anby_slam_tv_bw)
         }
         holder.itemView.setOnClickListener{
             onItemClick(position)
@@ -73,6 +73,10 @@ class FavoriteMoviesAdapter(private var movies : Movies, private val onItemClick
         updateMovies(updatedMovies)
         notifyItemRemoved(position)
 
+        // i thought, why the hell would this function need context ?
+        // and then i saw this thing.
+        // it scared me.
+        // FIXME
         val sharedPreferences = context.getSharedPreferences("favorites", MODE_PRIVATE)
         sharedPreferences.edit() {
             val updatedJson = Json.encodeToString(updatedMovies)

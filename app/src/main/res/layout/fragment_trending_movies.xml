@@ -51,6 +51,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"
+        android:isScrollContainer="false"
         android:id="@+id/trending_movies_fragment_genres">
     </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

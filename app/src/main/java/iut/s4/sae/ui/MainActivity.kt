@@ -160,7 +160,8 @@ class MainActivity : AppCompatActivity() {
     private fun searchMovie(searchTerm: String) {
         val intent = Intent(this, SearchActivity::class.java)
         intent
-            .putExtra(SearchActivity.SEARCH_TERM_ARGUMENT, searchTerm)
+            .putExtra(SearchActivity.EXTRA_SEARCH, searchTerm)
+            .action = Intent.ACTION_SEARCH
         startActivity(intent)
     }
 }

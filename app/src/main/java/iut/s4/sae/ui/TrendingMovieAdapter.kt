@@ -29,9 +29,7 @@ class TrendingMovieAdapter(private var movies: Movies, private val onItemClick: 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.title.text = movies.results[position].title
-        if (movies.results[position].backdropPath == null) {
-            holder.poster.setImageResource(R.drawable.media)
-        } else {
+        if (movies.results[position].backdropPath != null) {
             val image = Picasso.get().load("https://image.tmdb.org/t/p/original${movies.results[position].backdropPath}")
                 .into(holder.poster)
         }
