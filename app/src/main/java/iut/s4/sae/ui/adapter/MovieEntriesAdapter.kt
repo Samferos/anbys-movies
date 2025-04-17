@@ -1,4 +1,4 @@
-package iut.s4.sae.ui
+package iut.s4.sae.ui.adapter
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -16,7 +16,7 @@ import iut.s4.sae.model.Movies
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-class FavoriteMoviesAdapter(private var movies : Movies = Movies(mutableListOf()), private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<FavoriteMoviesAdapter.ViewHolder>() {
+class MovieEntriesAdapter(private var movies : Movies = Movies(mutableListOf()), private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<MovieEntriesAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title : TextView = view.findViewById(R.id.tv_movie_title)
@@ -82,7 +82,6 @@ class FavoriteMoviesAdapter(private var movies : Movies = Movies(mutableListOf()
             putString("favorite_movies", updatedJson)
         }
     }
-
 
     override fun getItemCount() = movies.results.size
 }

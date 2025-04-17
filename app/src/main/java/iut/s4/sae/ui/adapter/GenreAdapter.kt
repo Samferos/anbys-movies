@@ -1,9 +1,8 @@
-package iut.s4.sae.ui
+package iut.s4.sae.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import iut.s4.sae.R

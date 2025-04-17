@@ -1,4 +1,4 @@
-package iut.s4.sae.ui
+package iut.s4.sae.ui.fragment
 
 import android.content.Intent
 import android.os.Build
@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import iut.s4.sae.R
 import iut.s4.sae.model.Movies
-
-private const val ARG_PARAM1 = "movies"
+import iut.s4.sae.ui.MovieDetailActivity
+import iut.s4.sae.ui.adapter.MovieEntriesAdapter
 
 class FavoriteMoviesFragment : Fragment() {
     private var favoriteMovies : Movies? = null
@@ -24,7 +24,7 @@ class FavoriteMoviesFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        favoriteMovies = requireArguments().getParcelable(ARG_PARAM1, Movies::class.java)
+        favoriteMovies = requireArguments().getParcelable(EXTRA_MOVIES, Movies::class.java)
         Log.d(this::class.simpleName, "Retrieved movies $favoriteMovies")
     }
 
@@ -39,16 +39,16 @@ class FavoriteMoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerViewFavoriteMovies = view.findViewById<RecyclerView>(R.id.recycler_view_favorite_movie)
-        val favoriteMoviesAdapter = FavoriteMoviesAdapter(favoriteMovies ?: Movies(mutableListOf())) { position ->
+        val movieEntriesAdapter = MovieEntriesAdapter(favoriteMovies ?: Movies(mutableListOf())) { position ->
             val clickedMovie = favoriteMovies?.results?.get(position)
-            val movieId = clickedMovie?.id ?: return@FavoriteMoviesAdapter
+            val movieId = clickedMovie?.id ?: return@MovieEntriesAdapter
             val intent = Intent(requireContext(), MovieDetailActivity::class.java).apply {
                 putExtra("movie_id", movieId)
             }
             startActivity(intent)
         }
 
-        recyclerViewFavoriteMovies.adapter = favoriteMoviesAdapter
+        recyclerViewFavoriteMovies.adapter = movieEntriesAdapter
         recyclerViewFavoriteMovies.layoutManager = LinearLayoutManager(context)
 
         val llNoMovie : LinearLayout = view.findViewById<LinearLayout>(R.id.ll_no_movie)
@@ -67,7 +67,7 @@ class FavoriteMoviesFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                favoriteMoviesAdapter.removeMovie(requireContext(),position)
+                movieEntriesAdapter.removeMovie(requireContext(),position)
             }
         }
 
@@ -76,6 +76,9 @@ class FavoriteMoviesFragment : Fragment() {
     }
 
     companion object {
+
+        private const val EXTRA_MOVIES = "iut.s4.sae.EXTRA_MOVIES"
+
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
@@ -88,7 +91,7 @@ class FavoriteMoviesFragment : Fragment() {
         fun newInstance(movies: Movies) =
             FavoriteMoviesFragment().apply {
                 arguments = Bundle().apply {
-                    putParcelable(ARG_PARAM1, movies)
+                    putParcelable(EXTRA_MOVIES, movies)
                 }
             }
     }

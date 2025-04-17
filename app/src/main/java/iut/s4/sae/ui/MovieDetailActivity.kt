@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -27,6 +26,7 @@ import androidx.core.content.edit
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import iut.s4.sae.SettingsManager
+import iut.s4.sae.ui.adapter.CarouselMovieAdapter
 import kotlinx.serialization.encodeToString
 
 
@@ -111,9 +111,9 @@ class MovieDetailActivity : AppCompatActivity() {
             similarMovie = MovieDao.getInstance().fetchSimilarMovies(movieId, language = language)
         }
 
-        val similarMovieAdapter = TrendingMovieAdapter(similarMovie ?: Movies(mutableListOf())) { position ->
+        val similarMovieAdapter = CarouselMovieAdapter(similarMovie ?: Movies(mutableListOf())) { position ->
             val clickedMovie = similarMovie.results[position]
-            val _movieId = clickedMovie.id ?: return@TrendingMovieAdapter
+            val _movieId = clickedMovie.id ?: return@CarouselMovieAdapter
             val intent = Intent(this, MovieDetailActivity::class.java).apply {
                 putExtra("movie_id", _movieId)
             }

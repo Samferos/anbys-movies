@@ -1,4 +1,4 @@
-package iut.s4.sae.ui
+package iut.s4.sae.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -41,7 +41,7 @@ class SearchViewModel : ViewModel() {
      * Sets the search global settings.
      * Meant to be only called before starting a new search.
      */
-    fun setSearchSettings(language : String, includeAdult : Boolean) {
+    fun setSearchSettings(language: String, includeAdult: Boolean) {
         this.language = language
         this.includeAdult = includeAdult
     }
@@ -95,7 +95,7 @@ class SearchViewModel : ViewModel() {
      *
      * @return the next page fetching [Job]
      */
-    fun nextPage() : Job {
+    fun nextPage(): Job {
         return viewModelScope.launch {
             when (searchType) {
                 ACTION_SEARCH_BY_MOVIE -> {

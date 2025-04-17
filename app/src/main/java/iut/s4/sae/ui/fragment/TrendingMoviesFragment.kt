@@ -1,4 +1,4 @@
-package iut.s4.sae.ui
+package iut.s4.sae.ui.fragment
 
 import android.content.Intent
 import android.os.Build
@@ -19,10 +19,11 @@ import iut.s4.sae.action.ACTION_SEARCH_BY_GENRE
 import iut.s4.sae.model.Genres
 import iut.s4.sae.model.Movies
 import iut.s4.sae.network.MovieDao
+import iut.s4.sae.ui.MovieDetailActivity
+import iut.s4.sae.ui.SearchActivity
+import iut.s4.sae.ui.adapter.CarouselMovieAdapter
+import iut.s4.sae.ui.adapter.GenreAdapter
 import kotlinx.coroutines.runBlocking
-
-private const val ARG_PARAM1 = "movies"
-private const val ARG_PARAM2 = "genres"
 
 /**
  * Displays a carousel containing current trending movies,
@@ -40,8 +41,8 @@ class TrendingMoviesFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        trendingMovies = requireArguments().getParcelable(ARG_PARAM1, Movies::class.java)
-        movieGenres = requireArguments().getParcelable(ARG_PARAM2, Genres::class.java)
+        trendingMovies = requireArguments().getParcelable(EXTRA_MOVIES, Movies::class.java)
+        movieGenres = requireArguments().getParcelable(EXTRA_GENRES, Genres::class.java)
         Log.d(this::class.simpleName, "Retrieved movies $trendingMovies")
     }
 
@@ -56,15 +57,15 @@ class TrendingMoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val carousel = view.findViewById<RecyclerView>(R.id.trending_movies_fragment_carousel)
-        val trendingMovieAdapter = TrendingMovieAdapter(trendingMovies ?: Movies(mutableListOf())) { position ->
+        val carouselMovieAdapter = CarouselMovieAdapter(trendingMovies ?: Movies(mutableListOf())) { position ->
             val clickedMovie = trendingMovies?.results?.get(position)
-            val movieId = clickedMovie?.id ?: return@TrendingMovieAdapter
+            val movieId = clickedMovie?.id ?: return@CarouselMovieAdapter
             val intent = Intent(requireContext(), MovieDetailActivity::class.java).apply {
                 putExtra("movie_id", movieId)
             }
             startActivity(intent)
         }
-        carousel?.adapter = trendingMovieAdapter
+        carousel?.adapter = carouselMovieAdapter
         carousel?.layoutManager = CarouselLayoutManager()
 
         val trendingFilterDaily = view.findViewById<Chip>(R.id.trending_movies_fragment_daily_chip)
@@ -78,7 +79,7 @@ class TrendingMoviesFragment : Fragment() {
             runBlocking {
                 trendingMovies = MovieDao.getInstance().fetchTrendingMovies("day", language)
             }
-            trendingMovieAdapter.updateMovies(trendingMovies ?: Movies(mutableListOf()))
+            carouselMovieAdapter.updateMovies(trendingMovies ?: Movies(mutableListOf()))
         }
 
         trendingFilterWeekly.setOnClickListener {
@@ -87,7 +88,7 @@ class TrendingMoviesFragment : Fragment() {
             runBlocking {
                 trendingMovies = MovieDao.getInstance().fetchTrendingMovies("week", language)
             }
-            trendingMovieAdapter.updateMovies(trendingMovies ?: Movies(mutableListOf()))
+            carouselMovieAdapter.updateMovies(trendingMovies ?: Movies(mutableListOf()))
         }
 
         val genreList = view.findViewById<RecyclerView>(R.id.trending_movies_fragment_genres)
@@ -112,6 +113,10 @@ class TrendingMoviesFragment : Fragment() {
     }
 
     companion object {
+
+        private const val EXTRA_MOVIES = "iut.s4.sae.EXTRA_MOVIES"
+        private const val EXTRA_GENRES = "iut.s4.sae.EXTRA_GENRE"
+
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
@@ -126,8 +131,8 @@ class TrendingMoviesFragment : Fragment() {
         fun newInstance(movies: Movies, genres: Genres) =
             TrendingMoviesFragment().apply {
                 arguments = Bundle().apply {
-                    putParcelable(ARG_PARAM1, movies)
-                    putParcelable(ARG_PARAM2, genres)
+                    putParcelable(EXTRA_MOVIES, movies)
+                    putParcelable(EXTRA_GENRES, genres)
                 }
             }
     }

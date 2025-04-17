@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentTransaction
 import iut.s4.sae.R
 import iut.s4.sae.SettingsManager
+import iut.s4.sae.ui.fragment.SettingsFragment
 
 class SettingsActivity() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

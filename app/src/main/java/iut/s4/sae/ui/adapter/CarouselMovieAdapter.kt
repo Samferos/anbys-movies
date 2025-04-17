@@ -1,4 +1,4 @@
-package iut.s4.sae.ui
+package iut.s4.sae.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso
 import iut.s4.sae.R
 import iut.s4.sae.model.Movies
 
-class TrendingMovieAdapter(private var movies: Movies, private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<TrendingMovieAdapter.ViewHolder>() {
+class CarouselMovieAdapter(private var movies: Movies, private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<CarouselMovieAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var poster : ImageView = view.findViewById(R.id.trending_movie_entry_image)

@@ -9,17 +9,17 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.search.SearchBar
 import com.google.android.material.search.SearchView
 import iut.s4.sae.R
 import iut.s4.sae.SettingsManager
-import iut.s4.sae.action.ACTION_SEARCH_BY_GENRE
 import iut.s4.sae.action.ACTION_SEARCH_BY_MOVIE
 import iut.s4.sae.model.Movies
 import iut.s4.sae.network.MovieDao
+import iut.s4.sae.ui.fragment.FavoriteMoviesFragment
+import iut.s4.sae.ui.fragment.TrendingMoviesFragment
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlin.random.Random
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         val searchView = findViewById<SearchView>(R.id.main_search_view)
 
-        // Set fragment to trending movies by default
+        // Set fragment to trending movies by default if activity was newly created
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 runBlocking {

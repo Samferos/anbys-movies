@@ -1,14 +1,15 @@
-package iut.s4.sae.ui
+package iut.s4.sae.ui.fragment
 
-import android.content.Context.MODE_PRIVATE
+import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import iut.s4.sae.R
-import androidx.core.content.edit
 import iut.s4.sae.SettingsManager
+import iut.s4.sae.ui.MainActivity
 
 class SettingsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -32,7 +33,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
             startActivity(intent)
 
             // Smooth transition
-            activity?.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                activity?.overrideActivityTransition(Activity.OVERRIDE_TRANSITION_OPEN, android.R.anim.fade_in, android.R.anim.fade_out)
+            }
 
             true
         }

@@ -16,9 +16,8 @@ import com.google.android.material.chip.ChipGroup
 import iut.s4.sae.R
 import iut.s4.sae.SettingsManager
 import iut.s4.sae.action.*
-import iut.s4.sae.model.MovieSortType
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
+import iut.s4.sae.ui.adapter.MovieEntriesAdapter
+import iut.s4.sae.ui.viewmodel.SearchViewModel
 
 /**
  * An activity that allow to search for movies.
@@ -63,7 +62,7 @@ class SearchActivity : AppCompatActivity() {
         val results = findViewById<RecyclerView>(R.id.search_results_view)
 
         val resultsLayoutManager = LinearLayoutManager(this)
-        val resultsMoviesAdapter = FavoriteMoviesAdapter(viewModel.moviesResults) {
+        val resultsMoviesAdapter = MovieEntriesAdapter(viewModel.moviesResults) {
             position ->
             val id = viewModel.moviesResults.results[position].id
             val intent = Intent(this, MovieDetailActivity::class.java)
