@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AnbyMovie</string>
+    <string name="app_name">Anby\'s Movies</string>
     <string name="search_movies">Search Movies</string>
     <string name="in_app_name">anby</string>
     <string name="search_movies_action">Discover</string>

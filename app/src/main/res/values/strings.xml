@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Anby\'s Movies</string>
+    <string name="app_name">Les Films de Anby</string>
     <string name="search_movies">Rechercher des films</string>
     <string name="in_app_name">anby</string>
     <string name="search_movies_action">Découvrir</string>
