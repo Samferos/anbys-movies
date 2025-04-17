@@ -31,6 +31,7 @@
     <string name="no_favorite_movies">Il n\'y a actuellement aucun film favori</string>
     <string name="no_favorite_movies_description">Il n\'y a actuellement aucun film favori</string>
     <string name="reload_for_language_changes">For the changes to take effect, kindly restart the application</string>
+    <string name="favorite_indication">Balayez vers la gauche pour supprimer un favori</string>
     <string-array name="language">
         <item>Français</item>
         <item>English</item>

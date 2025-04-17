@@ -17,6 +17,14 @@ import iut.s4.sae.R
 import iut.s4.sae.model.Movies
 import iut.s4.sae.ui.MovieDetailActivity
 import iut.s4.sae.ui.adapter.MovieEntriesAdapter
+import android.graphics.RectF
+import android.graphics.Path
+import android.graphics.Paint
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.CornerPathEffect
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.withClip
 
 class FavoriteMoviesFragment : Fragment() {
     private var favoriteMovies : Movies? = null
@@ -67,7 +75,54 @@ class FavoriteMoviesFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                movieEntriesAdapter.removeMovie(requireContext(),position)
+                movieEntriesAdapter.removeMovie(requireContext(), position)
+            }
+
+            override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE && dX < 0) {
+                    val itemView = viewHolder.itemView
+                    val paint = Paint()
+                    paint.color = Color.RED
+
+                    // Draw the red background within clipped bounds
+                    c.withClip(
+                        itemView.right + dX - 50,
+                        itemView.top.toFloat(),
+                        itemView.right.toFloat(),
+                        itemView.bottom.toFloat()
+                    ) {
+                        drawRect(
+                            itemView.left.toFloat(),
+                            itemView.top.toFloat(),
+                            itemView.right.toFloat(),
+                            itemView.bottom.toFloat(),
+                            paint
+                        )
+                    }
+
+                    // Load and draw the icon
+                    val icon = ContextCompat.getDrawable(recyclerView.context, R.drawable.round_close_24)
+                    icon?.let {
+                        val iconMargin = (itemView.height - it.intrinsicHeight) / 2
+                        val iconTop = itemView.top + iconMargin
+                        val iconBottom = iconTop + it.intrinsicHeight
+                        val iconRight = itemView.right - iconMargin + (iconMargin/2)
+                        val iconLeft = iconRight - it.intrinsicWidth
+
+                        it.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+                        it.draw(c)
+                    }
+                }
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             }
         }
 
