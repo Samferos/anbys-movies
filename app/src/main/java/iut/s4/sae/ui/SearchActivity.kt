@@ -10,7 +10,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
@@ -72,43 +74,55 @@ class SearchActivity : AppCompatActivity() {
         results.layoutManager = resultsLayoutManager
         results.adapter = resultsMoviesAdapter
         results.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            var lastVisibleItem : Int = 0
+            var farthestLastViewedItemPosition : Int = 0
+            var fetchingMovies : Boolean = false
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                Log.d(this::class.simpleName, "${resultsLayoutManager.findLastVisibleItemPosition()} -- $lastVisibleItem")
-                if (resultsLayoutManager.findLastVisibleItemPosition() <= lastVisibleItem) return
+                Log.d(this::class.simpleName, "${resultsLayoutManager.findLastVisibleItemPosition()} -- $farthestLastViewedItemPosition")
+                if (resultsLayoutManager.findLastVisibleItemPosition() <= farthestLastViewedItemPosition || fetchingMovies) return
                 if (resultsLayoutManager.findLastVisibleItemPosition() >= viewModel.moviesResults.results.size - 2) {
                     Log.d(this@SearchActivity::class.simpleName, "Started fetching next page.")
-                    viewModel.nextPage()
+                    fetchingMovies = true
+                    viewModel.nextPage().invokeOnCompletion {
+                        fetchingMovies = false
+                    }
                 }
-                lastVisibleItem = resultsLayoutManager.findLastVisibleItemPosition()
+                farthestLastViewedItemPosition = resultsLayoutManager.findLastVisibleItemPosition()
             }
         })
 
-        // Launch background viewModel movie results collection
-        lifecycleScope.launch {
-            if (savedInstanceState == null) {
-                // Here, we only start collecting, AFTER we have initial (with .join())
-                // movies (for some reason, it doesn't collect otherwise)
-                when (intent.action) {
-                    ACTION_SEARCH_BY_GENRE -> {
-                        viewModel.searchGenres(genreId).join()
-                    }
+        val onSearchResult = {
+            if (viewModel.moviesResults.results.isEmpty()) { // If the initial search provided no results.
+                filterChipGroup.visibility = View.GONE
+                noMoviesFoundText.visibility = View.VISIBLE
+            }
+            findViewById<View>(R.id.search_results_loading).visibility = View.GONE
+        }
 
-                    else -> { // ACTION_SEARCH_BY_MOVIE
-                        viewModel.searchMovies(searchText).join()
-                    }
+        if (savedInstanceState == null) {
+            when (intent.action) {
+                ACTION_SEARCH_BY_GENRE -> {
+                    viewModel.searchGenres(genreId).invokeOnCompletion { onSearchResult() }
                 }
-                findViewById<View>(R.id.search_results_loading).visibility = View.GONE
-                if (viewModel.moviesResults.results.isEmpty()) { // If the initial search provided no results.
-                    filterChipGroup.visibility = View.GONE
-                    noMoviesFoundText.visibility = View.VISIBLE
-                    return@launch
+
+                else -> { // ACTION_SEARCH_BY_MOVIE
+                    viewModel.searchMovies(searchText).invokeOnCompletion { onSearchResult() }
                 }
             }
-            viewModel.newMoviesFlow.collect {
-                if (it.results.size != viewModel.moviesResults.results.size && savedInstanceState != null) return@collect
-                    resultsMoviesAdapter.addMovies(it)
+        }
+
+        // Launch background viewModel movie results collection
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                var hadSavedState = savedInstanceState != null
+                viewModel.newMoviesFlow.collect {
+                    if (hadSavedState) {
+                        hadSavedState = false
+                        return@collect
+                    }
+                    resultsMoviesAdapter.notifyItemRangeInserted(viewModel.moviesResults.results.size - it.results.size, it.results.size)
+                    Log.d(this@SearchActivity::class.simpleName, "Received next page. Received ${it.results.size} movies, now ${viewModel.moviesResults.results.size}")
+                }
             }
         }
     }

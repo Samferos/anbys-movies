@@ -34,7 +34,7 @@ class SearchViewModel : ViewModel() {
 
     private val _newMoviesFlow = MutableStateFlow(Movies(mutableListOf()))
     val newMoviesFlow: StateFlow<Movies> = _newMoviesFlow.asStateFlow()
-    var moviesResults = _newMoviesFlow.value
+    var moviesResults = Movies(mutableListOf())
         private set
 
     /**
@@ -60,7 +60,8 @@ class SearchViewModel : ViewModel() {
             val newMovies = MovieDao.getInstance().searchMovies(
                 query, currentPage, language, includeAdult
             )
-            moviesResults = newMovies
+            moviesResults.results.clear()
+            moviesResults.results.addAll(newMovies.results)
             _newMoviesFlow.value = newMovies
         }
     }
@@ -79,7 +80,8 @@ class SearchViewModel : ViewModel() {
             val newMovies = MovieDao.getInstance().discoverByGenre(
                 genreId, currentPage, language = language, includeAdult = includeAdult
             )
-            moviesResults = newMovies
+            moviesResults.results.clear()
+            moviesResults.results.addAll(newMovies.results)
             _newMoviesFlow.value = newMovies
         }
     }
