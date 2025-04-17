@@ -10,16 +10,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
 import iut.s4.sae.R
 import iut.s4.sae.SettingsManager
-import kotlinx.coroutines.launch
 import iut.s4.sae.action.*
+import iut.s4.sae.model.MovieSortType
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 /**
  * An activity that allow to search for movies.
@@ -85,6 +84,7 @@ class SearchActivity : AppCompatActivity() {
                     fetchingMovies = true
                     viewModel.nextPage().invokeOnCompletion {
                         fetchingMovies = false
+                        resultsMoviesAdapter.notifyItemRangeInserted(viewModel.moviesResults.results.size, viewModel.newMoviesFlow.value.results.size)
                     }
                 }
                 farthestLastViewedItemPosition = resultsLayoutManager.findLastVisibleItemPosition()
@@ -97,6 +97,7 @@ class SearchActivity : AppCompatActivity() {
                 noMoviesFoundText.visibility = View.VISIBLE
             }
             findViewById<View>(R.id.search_results_loading).visibility = View.GONE
+            resultsMoviesAdapter.notifyItemRangeInserted(0, viewModel.newMoviesFlow.value.results.size)
         }
 
         if (savedInstanceState == null) {
@@ -107,21 +108,6 @@ class SearchActivity : AppCompatActivity() {
 
                 else -> { // ACTION_SEARCH_BY_MOVIE
                     viewModel.searchMovies(searchText).invokeOnCompletion { onSearchResult() }
-                }
-            }
-        }
-
-        // Launch background viewModel movie results collection
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                var hadSavedState = savedInstanceState != null
-                viewModel.newMoviesFlow.collect {
-                    if (hadSavedState) {
-                        hadSavedState = false
-                        return@collect
-                    }
-                    resultsMoviesAdapter.notifyItemRangeInserted(viewModel.moviesResults.results.size - it.results.size, it.results.size)
-                    Log.d(this@SearchActivity::class.simpleName, "Received next page. Received ${it.results.size} movies, now ${viewModel.moviesResults.results.size}")
                 }
             }
         }
