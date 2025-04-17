@@ -9,6 +9,7 @@ import iut.s4.sae.network.MovieDao
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -32,7 +33,7 @@ class SearchViewModel : ViewModel() {
     private var includeAdult: Boolean = false
 
     private val _newMoviesFlow = MutableStateFlow(Movies(mutableListOf()))
-    val newMoviesFlow: StateFlow<Movies> = _newMoviesFlow
+    val newMoviesFlow: StateFlow<Movies> = _newMoviesFlow.asStateFlow()
     var moviesResults = _newMoviesFlow.value
         private set
 

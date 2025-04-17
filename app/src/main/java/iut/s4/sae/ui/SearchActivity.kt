@@ -6,14 +6,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.ChipGroup
@@ -21,8 +18,6 @@ import iut.s4.sae.R
 import iut.s4.sae.SettingsManager
 import kotlinx.coroutines.launch
 import iut.s4.sae.action.*
-import iut.s4.sae.model.Movies
-import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * An activity that allow to search for movies.
@@ -82,7 +77,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 Log.d(this::class.simpleName, "${resultsLayoutManager.findLastVisibleItemPosition()} -- $lastVisibleItem")
                 if (resultsLayoutManager.findLastVisibleItemPosition() <= lastVisibleItem) return
-                if (resultsLayoutManager.findLastVisibleItemPosition() >= viewModel.moviesResults.results.size - 1) {
+                if (resultsLayoutManager.findLastVisibleItemPosition() >= viewModel.moviesResults.results.size - 2) {
                     Log.d(this@SearchActivity::class.simpleName, "Started fetching next page.")
                     viewModel.nextPage()
                 }
@@ -92,24 +87,28 @@ class SearchActivity : AppCompatActivity() {
 
         // Launch background viewModel movie results collection
         lifecycleScope.launch {
-            // Here, we only start collecting, AFTER we have initial (with .join())
-            // movies (for some reason, it doesn't collect otherwise)
-            when (intent.action) {
-                ACTION_SEARCH_BY_GENRE -> {
-                    viewModel.searchGenres(genreId).join()
+            if (savedInstanceState == null) {
+                // Here, we only start collecting, AFTER we have initial (with .join())
+                // movies (for some reason, it doesn't collect otherwise)
+                when (intent.action) {
+                    ACTION_SEARCH_BY_GENRE -> {
+                        viewModel.searchGenres(genreId).join()
+                    }
+
+                    else -> { // ACTION_SEARCH_BY_MOVIE
+                        viewModel.searchMovies(searchText).join()
+                    }
                 }
-                else -> { // ACTION_SEARCH_BY_MOVIE
-                    viewModel.searchMovies(searchText).join()
+                findViewById<View>(R.id.search_results_loading).visibility = View.GONE
+                if (viewModel.moviesResults.results.isEmpty()) { // If the initial search provided no results.
+                    filterChipGroup.visibility = View.GONE
+                    noMoviesFoundText.visibility = View.VISIBLE
+                    return@launch
                 }
-            }
-            findViewById<View>(R.id.search_results_loading).visibility = View.GONE
-            if (viewModel.moviesResults.results.isEmpty()) { // If the initial search provided no results.
-                filterChipGroup.visibility = View.GONE
-                noMoviesFoundText.visibility = View.VISIBLE
-                return@launch
             }
             viewModel.newMoviesFlow.collect {
-                resultsMoviesAdapter.addMovies(it)
+                if (it.results.size != viewModel.moviesResults.results.size && savedInstanceState != null) return@collect
+                    resultsMoviesAdapter.addMovies(it)
             }
         }
     }
