@@ -6,7 +6,9 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.preference.ListPreference
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import iut.s4.sae.R
 import iut.s4.sae.SettingsManager
 import iut.s4.sae.ui.MainActivity
@@ -39,9 +41,21 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
             true
         }
+        val aboutPreference : Preference? = findPreference("about_dialog")
 
-
-
+        aboutPreference?.setOnPreferenceClickListener {
+            context?.let { it1 ->
+                MaterialAlertDialogBuilder(it1)
+                    .setTitle(resources.getString(R.string.app_name))
+                    .setIcon(resources.getDrawable(R.drawable.ic_launcher_foreground))
+                    .setMessage(resources.getString(R.string.content_dialog))
+                    .setPositiveButton(resources.getString(R.string.close_dialog)) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    .show()
+            }
+            true
+        }
     }
 
 

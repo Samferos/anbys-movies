@@ -10,4 +10,7 @@
         android:defaultValue="en"
         android:entries="@array/language"
         android:entryValues="@array/language_values"/>
+    <Preference
+        android:key="about_dialog"
+        android:title="@string/about"/>
 </PreferenceScreen>

@@ -34,6 +34,9 @@
     <string name="favorite_indication">Balayez vers la gauche pour supprimer un favori</string>
     <string name="similar_movie">Films similaires</string>
     <string name="main_error_no_response">No response from the server.\nAre you connected to the internet ?</string>
+    <string name="about">A propos</string>
+    <string name="close_dialog">Fermer</string>
+    <string name="content_dialog">    Application développée dans le cadre de la SAÉ 4 - R4.11 (Développement mobile) à l\'IUT de Nantes.\n\nCette application utilise l’API publique de The Movie Database (TMDb) pour rechercher et afficher des films.\n\nDéveloppée par :\n- Samuel Antunes \n- Théo Phan \n- Lohan Boeglin \n\nAnnée universitaire 2024–2025</string>
     <string-array name="language">
         <item>Français</item>
         <item>English</item>
