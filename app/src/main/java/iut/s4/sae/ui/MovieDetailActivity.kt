@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -24,9 +25,13 @@ import kotlinx.serialization.json.Json
 import kotlin.math.roundToLong
 import androidx.core.content.edit
 import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import iut.s4.sae.SettingsManager
 import iut.s4.sae.ui.adapter.CarouselMovieAdapter
+import iut.s4.sae.ui.viewmodel.MovieDetailViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 
 
@@ -43,6 +48,8 @@ class MovieDetailActivity : AppCompatActivity() {
     private lateinit var carousel : RecyclerView
     private lateinit var floatingButtonAddFavorite : FloatingActionButton
     private var isFavorite : Boolean = false
+
+    private val viewModel:MovieDetailViewModel by viewModels()
 
     val allowAdult : Boolean
         get()=SettingsManager.isAdultContentAllowed(this)
@@ -70,7 +77,6 @@ class MovieDetailActivity : AppCompatActivity() {
         }
         val topBar = findViewById<MaterialToolbar>(R.id.movie_detail_topbar)
         val movieId = intent.getIntExtra("movie_id", -1)
-        val movie : Movie?
 
         backdrop = findViewById(R.id.movie_detail_backdrop)
         poster = findViewById(R.id.movie_detail_poster)
@@ -84,34 +90,40 @@ class MovieDetailActivity : AppCompatActivity() {
         carousel = findViewById(R.id.movie_detail_carousel)
 
 
-
-        runBlocking {
-            movie = MovieDao.getInstance().searchMovieDetails(movieId.toString(), language)
-        }
-
-        Picasso.get().load("https://image.tmdb.org/t/p/original${movie?.backdropPath}")
-            .into(backdrop)
-        Picasso.get().load("https://image.tmdb.org/t/p/original${movie?.posterPath}")
-            .into(poster)
-
         topBar.setNavigationOnClickListener {
             finish()
         }
-        titleTextView.text = movie?.title
-        yearTextView.text = ("(${movie?.releaseDate?.split("-")?.get(0) ?: ""})")
-        dateTextView.text = movie?.releaseDate
-        scoreTextView.text = ("${movie?.voteAverage?.roundToLong()}/10")
-        genreTextView.text = movie?.genres?.joinToString(" - ") { it.name }
-        runtimeTextView.text = formatRuntime(movie?.runtime)
-        overviewTextView.text = movie?.overview
 
-        val similarMovie : Movies
-
-        runBlocking {
-            similarMovie = MovieDao.getInstance().fetchSimilarMovies(movieId, language = language)
+        val viewUpdater = {
+            titleTextView.text = viewModel.movie.title
+            yearTextView.text = ("(${viewModel.movie.releaseDate?.split("-")?.get(0) ?: ""})")
+            dateTextView.text = viewModel.movie.releaseDate
+            scoreTextView.text = ("${viewModel.movie.voteAverage?.roundToLong()}/10")
+            genreTextView.text = viewModel.movie.genres.joinToString(" - ") { it.name }
+            runtimeTextView.text = formatRuntime(viewModel.movie.runtime)
+            overviewTextView.text = viewModel.movie.overview
+            Picasso.get().load("https://image.tmdb.org/t/p/original${viewModel.movie.backdropPath}")
+                .into(backdrop)
+            Picasso.get().load("https://image.tmdb.org/t/p/original${viewModel.movie.posterPath}")
+                .into(poster)
+            isFavorite = isMovieFavorite(this@MovieDetailActivity, viewModel.movie)
+            updateFloatingActionButton()
+            floatingButtonAddFavorite.setOnClickListener {
+                toggleFavorite(this@MovieDetailActivity, viewModel.movie)
+                updateFloatingActionButton()
+            }
         }
 
-        val similarMovieAdapter = CarouselMovieAdapter(similarMovie ?: Movies(mutableListOf())) {
+        if (savedInstanceState==null){
+            viewModel.fetchSimilarMovies(movieId, language)
+            viewModel.fetchMovieDetails(movieId, language).invokeOnCompletion {
+                viewUpdater()
+            }
+        }
+
+        viewUpdater()
+
+        val similarMovieAdapter = CarouselMovieAdapter(viewModel.similarMovies.value ?: Movies(mutableListOf())) {
             tappedMovie ->
             val intent = Intent(this, MovieDetailActivity::class.java).apply {
                 putExtra("movie_id", tappedMovie.id)
@@ -122,16 +134,13 @@ class MovieDetailActivity : AppCompatActivity() {
         carousel.adapter = similarMovieAdapter
         carousel.layoutManager = CarouselLayoutManager()
 
-        if (movie != null) {
-            isFavorite = isMovieFavorite(this@MovieDetailActivity, movie)
-            updateFloatingActionButton()
-        }
-        floatingButtonAddFavorite.setOnClickListener {
-            if (movie != null) {
-                toggleFavorite(this@MovieDetailActivity, movie)
-                updateFloatingActionButton()
+        lifecycleScope.launch {
+            viewModel.similarMovies.collect {
+                if (savedInstanceState == null)
+                    similarMovieAdapter.updateMovies(it)
             }
         }
+
 
 
     }
