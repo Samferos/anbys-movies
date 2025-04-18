@@ -79,6 +79,7 @@ class MainActivity : AppCompatActivity() {
                 searchBar.setText(v.text)
                 searchView.hide()
                 searchMovie(v.text.toString())
+                searchView.clearFocus()
                 true
             }
 
