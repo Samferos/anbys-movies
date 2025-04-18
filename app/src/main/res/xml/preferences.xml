@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference
+        android:title="@string/setting_allow_adult_content"
+        android:key="allow_adult_content_preference"
+        android:defaultValue="false"/>
+    <ListPreference
+        android:title="@string/setting_preferred_language"
+        android:key="language_preference"
+        android:defaultValue="en"
+        android:entries="@array/language"
+        android:entryValues="@array/language_values"/>
+    <Preference
+        android:key="about_dialog"
+        android:title="@string/about"/>
+</PreferenceScreen>

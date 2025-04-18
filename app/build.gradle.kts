@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id ("kotlin-parcelize")
+    id ("kotlinx-serialization")
 }
 
 android {
@@ -15,7 +17,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String","API_KEY","b7bfacb90ae96adf2c1829d065728c36")
+        buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY") ?: ""}\"")
     }
 
     buildTypes {
@@ -40,13 +42,32 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.drawerlayout)
+    implementation(libs.androidx.preference)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.androidx.activity.ktx)
+
+    implementation (libs.ktor.client.android)
+    implementation (libs.ktor.client.okhttp.jvm)
+    implementation (libs.ktor.client.logging)
+    implementation (libs.ktor.client.core)
+
+    implementation (libs.ktor.client.content.negotiation)
+    implementation (libs.ktor.serialization.kotlinx.json)
+
+
+    implementation (libs.picasso)
+
+    implementation (libs.kotlinx.serialization.json)
+    testImplementation(kotlin("test"))
+
+
 }

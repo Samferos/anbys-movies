@@ -1,3 +1,54 @@
 <resources>
-    <string name="app_name">AnbyMovie</string>
+    <string name="app_name">Les Films de Anby</string>
+    <string name="search_movies">Rechercher des films</string>
+    <string name="in_app_name">anby</string>
+    <string name="search_movies_action">Découvrir</string>
+    <string name="base_actions">Actions</string>
+    <string name="favourite_movies">Favoris</string>
+    <string name="settings">Paramètres</string>
+    <string name="search_movie_title">Titre du film</string>
+    <string name="search_movie_type">Genre</string>
+    <string name="advanced_search">Recherche avancée</string>
+    <string name="history">Historique</string>
+    <string name="clear_history">Effacer l\'historique</string>
+    <string name="setting_allow_adult_content">Autoriser le contenu pour adultes</string>
+    <string name="setting_preferred_language">Langue</string>
+    <string name="warning_invalid_search">La recherche entrée est invalide.</string>
+    <string name="trending_movies_header">Tendances</string>
+    <string name="trending_filter_daily">Du jour</string>
+    <string name="trending_filter_weekly">De la semaine</string>
+    <string name="movie_poster">Affiche du film</string>
+    <string name="release_date">Date de sortie</string>
+    <string name="genre">Genre</string>
+    <string name="title">Titre</string>
+    <string name="movie_genres_header">Genres</string>
+    <string name="search_filter_by_order">Par Ordre</string>
+    <string name="search_filter_by_popularity">Par Popularité</string>
+    <string name="search_filter_by_year">Par Année</string>
+    <string name="search_no_movies_found">Aucun film n\'a été trouvé à partir de la recherche donnée.</string>
+    <string name="adult_tag" translatable="false">+18</string>
+    <string name="overview">Résumé</string>
+    <string name="no_favorite_movies">Il n\'y a actuellement aucun film favori</string>
+    <string name="no_favorite_movies_description">Il n\'y a actuellement aucun film favori</string>
+    <string name="reload_for_language_changes">For the changes to take effect, kindly restart the application</string>
+    <string name="favorite_indication">Balayez vers la gauche pour supprimer un favori</string>
+    <string name="similar_movie">Films similaires</string>
+    <string name="main_error_no_response">No response from the server.\nAre you connected to the internet ?</string>
+    <string name="search_filter_descending">Descending</string>
+    <string name="search_filter_ascending">Ascending</string>
+    <string name="search_filter_by_rating">Par note</string>
+    <string name="search_filter_by_title">Par Titre</string>
+    <string name="search_filter_open">Filtrer</string>
+    <string name="search_filter_confirm">Confirm</string>
+    <string name="about">A propos</string>
+    <string name="close_dialog">Fermer</string>
+    <string name="content_dialog">    Application développée dans le cadre de la SAÉ 4 - R4.11 (Développement mobile) à l\'IUT de Nantes.\n\nCette application utilise l’API publique de The Movie Database (TMDb) pour rechercher et afficher des films.\n\nDéveloppée par :\n- Samuel Antunes \n- Théo Phan \n- Lohan Boeglin \n\nAnnée universitaire 2024–2025</string>
+    <string-array name="language">
+        <item>Français</item>
+        <item>English</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>fr</item>
+        <item>en</item>
+    </string-array>
 </resources>

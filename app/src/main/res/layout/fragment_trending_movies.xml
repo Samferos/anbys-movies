@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragment.TrendingMoviesFragment"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceDisplayMedium"
+        android:text="@string/trending_movies_header"/>
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:id="@+id/trending_movies_fragment_daily_chip"
+            android:text="@string/trending_filter_daily"/>
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:id="@+id/trending_movies_fragment_weekly_chip"
+            android:text="@string/trending_filter_weekly"/>
+    </com.google.android.material.chip.ChipGroup>
+
+    <FrameLayout
+        android:id="@+id/trending_movies_fragment_carousel_loading"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="196dp">
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:indeterminate="true"
+            app:indicatorSize="128dp"
+            app:trackThickness="8dp"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/trending_movies_fragment_error"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="@string/main_error_no_response"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+    <!-- Carousel -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="196dp"
+        android:id="@+id/trending_movies_fragment_carousel"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingVertical="8dp">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:textAppearance="?attr/textAppearanceDisplaySmall"
+        android:text="@string/movie_genres_header"/>
+
+    <FrameLayout
+        android:id="@+id/trending_movies_fragment_genres_loading"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="196dp">
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:indeterminate="true"
+            app:indicatorSize="128dp"
+            app:trackThickness="8dp"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+    <!-- Genres -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"
+        android:isScrollContainer="false"
+        android:id="@+id/trending_movies_fragment_genres">
+    </androidx.recyclerview.widget.RecyclerView>
+</LinearLayout>
