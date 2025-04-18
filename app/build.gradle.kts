@@ -67,9 +67,7 @@ dependencies {
     implementation (libs.picasso)
 
     implementation (libs.kotlinx.serialization.json)
-
-
-
+    testImplementation(kotlin("test"))
 
 
 }
