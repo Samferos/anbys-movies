@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.carousel.MaskableFrameLayout
 import com.squareup.picasso.Picasso
 import iut.s4.sae.R
+import iut.s4.sae.model.Movie
 import iut.s4.sae.model.Movies
 
-class CarouselMovieAdapter(private var movies: Movies, private val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<CarouselMovieAdapter.ViewHolder>() {
+class CarouselMovieAdapter(private var movies: Movies, private val onItemClick: (Movie) -> Unit) : RecyclerView.Adapter<CarouselMovieAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var poster : ImageView = view.findViewById(R.id.trending_movie_entry_image)
@@ -34,7 +35,7 @@ class CarouselMovieAdapter(private var movies: Movies, private val onItemClick: 
                 .into(holder.poster)
         }
         holder.itemView.setOnClickListener{
-            onItemClick(position)
+            onItemClick(movies.results[position])
         }
         (holder.itemView as MaskableFrameLayout).setOnMaskChangedListener {
             maskRect ->
@@ -44,7 +45,14 @@ class CarouselMovieAdapter(private var movies: Movies, private val onItemClick: 
 
     fun updateMovies(newMovies: Movies) {
         movies = newMovies
-        notifyDataSetChanged()
+        val difference = movies.results.size - newMovies.results.size
+        if (difference < 0) {
+            notifyItemRangeRemoved(0, newMovies.results.size)
+        }
+        else if (difference > 0) {
+            notifyItemRangeInserted(0, newMovies.results.size)
+        }
+        notifyItemRangeChanged(0, movies.results.size)
     }
 
     override fun getItemCount() = movies.results.size

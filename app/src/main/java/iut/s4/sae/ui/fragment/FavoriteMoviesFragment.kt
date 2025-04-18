@@ -60,7 +60,7 @@ class FavoriteMoviesFragment : Fragment() {
         recyclerViewFavoriteMovies.adapter = movieEntriesAdapter
         recyclerViewFavoriteMovies.layoutManager = LinearLayoutManager(context)
 
-        val llNoMovie : LinearLayout = view.findViewById<LinearLayout>(R.id.ll_no_movie)
+        val llNoMovie : LinearLayout = view.findViewById(R.id.ll_no_movie)
         if (favoriteMovies!!.results.isEmpty()) {
             llNoMovie.visibility = View.VISIBLE
         } else {

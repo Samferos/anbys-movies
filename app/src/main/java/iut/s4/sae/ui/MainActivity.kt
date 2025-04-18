@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.commit
@@ -17,9 +18,10 @@ import iut.s4.sae.R
 import iut.s4.sae.SettingsManager
 import iut.s4.sae.action.ACTION_SEARCH_BY_MOVIE
 import iut.s4.sae.model.Movies
-import iut.s4.sae.network.MovieDao
 import iut.s4.sae.ui.fragment.FavoriteMoviesFragment
+import iut.s4.sae.ui.fragment.MainViewFragmentFactory
 import iut.s4.sae.ui.fragment.TrendingMoviesFragment
+import iut.s4.sae.ui.viewmodel.TrendingMoviesViewModel
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import kotlin.random.Random
@@ -30,7 +32,10 @@ class MainActivity : AppCompatActivity() {
     val language : String
         get() = SettingsManager.getPreferredLanguage(this)
 
+    private val trendingMoviesViewModel : TrendingMoviesViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportFragmentManager.fragmentFactory = MainViewFragmentFactory(trendingMoviesViewModel)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -42,14 +47,10 @@ class MainActivity : AppCompatActivity() {
         // Set fragment to trending movies by default if activity was newly created
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
-                runBlocking {
-                    replace(
-                        R.id.main_movie_list_fragment_view, TrendingMoviesFragment.newInstance(
-                            MovieDao.getInstance().fetchTrendingMovies(language = language),
-                            MovieDao.getInstance().fetchGenres(language)
-                        )
-                    )
-                }
+                setReorderingAllowed(true)
+                replace(
+                    R.id.main_movie_list_fragment_view, TrendingMoviesFragment(trendingMoviesViewModel)
+                )
             }
         }
 
@@ -85,24 +86,25 @@ class MainActivity : AppCompatActivity() {
         bottomBar.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.bottom_bar_movies_menu -> {
+                    if (supportFragmentManager.findFragmentById(R.id.main_movie_list_fragment_view) is TrendingMoviesFragment)
+                        return@setOnItemSelectedListener false
                     supportFragmentManager.commit {
-                        runBlocking {
-                            replace(R.id.main_movie_list_fragment_view, TrendingMoviesFragment.newInstance(
-                                MovieDao.getInstance().fetchTrendingMovies(language = language), MovieDao.getInstance().fetchGenres(language)))
-                        }
+                        setReorderingAllowed(true)
+                        replace(R.id.main_movie_list_fragment_view, TrendingMoviesFragment(trendingMoviesViewModel))
                     }
                     true
                 }
                 R.id.bottom_bar_favourite_movies_menu -> {
                     supportFragmentManager.commit {
-                        runBlocking {
-                            replace(
-                                R.id.main_movie_list_fragment_view,
-                                FavoriteMoviesFragment.newInstance(
-                                    getFavoriteMovie(this@MainActivity)
-                                )
+                        if (supportFragmentManager.findFragmentById(R.id.main_movie_list_fragment_view) is FavoriteMoviesFragment)
+                            return@setOnItemSelectedListener false
+                        setReorderingAllowed(true)
+                        replace(
+                            R.id.main_movie_list_fragment_view,
+                            FavoriteMoviesFragment.newInstance(
+                                getFavoriteMovie(this@MainActivity)
                             )
-                        }
+                        )
                     }
                     true
                 }
