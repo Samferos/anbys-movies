@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Anby\'s Movies</string>
     <string name="search_movies">Search Movies</string>
-    <string name="in_app_name">anby</string>
+    <string name="in_app_name">anby offers you this virtual burger</string>
     <string name="search_movies_action">Discover</string>
     <string name="base_actions">Actions</string>
     <string name="favourite_movies">Favorites</string>
