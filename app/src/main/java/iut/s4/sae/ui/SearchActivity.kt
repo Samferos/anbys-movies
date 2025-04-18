@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -12,11 +13,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.chip.ChipGroup
 import iut.s4.sae.R
 import iut.s4.sae.SettingsManager
 import iut.s4.sae.action.*
 import iut.s4.sae.ui.adapter.MovieEntriesAdapter
+import iut.s4.sae.ui.fragment.SearchFilterBottomSheetFragment
 import iut.s4.sae.ui.viewmodel.SearchViewModel
 
 /**
@@ -45,7 +46,6 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        val filterChipGroup = findViewById<ChipGroup>(R.id.search_chip_group)
         val noMoviesFoundText = findViewById<TextView>(R.id.search_no_movies_found)
 
         val genreId = intent.getIntExtra(EXTRA_GENRE_ID, 0)
@@ -92,11 +92,23 @@ class SearchActivity : AppCompatActivity() {
 
         val onSearchResult = {
             if (viewModel.moviesResults.results.isEmpty()) { // If the initial search provided no results.
-                filterChipGroup.visibility = View.GONE
                 noMoviesFoundText.visibility = View.VISIBLE
             }
             findViewById<View>(R.id.search_results_loading).visibility = View.GONE
             resultsMoviesAdapter.notifyItemRangeInserted(0, viewModel.newMoviesFlow.value.results.size)
+        }
+
+        if (intent.action == ACTION_SEARCH_BY_GENRE) {
+            val filterButton = findViewById<Button>(R.id.search_filter_open)
+            filterButton.visibility = if (intent.action == ACTION_SEARCH_BY_GENRE) View.VISIBLE else View.GONE
+            val filterBottomSheet = SearchFilterBottomSheetFragment(viewModel) {
+                viewModel.searchGenres(genreId).invokeOnCompletion {
+                    resultsMoviesAdapter.notifyDataSetChanged()
+                }
+            }
+            filterButton.setOnClickListener {
+                filterBottomSheet.show(supportFragmentManager, SearchFilterBottomSheetFragment.TAG)
+            }
         }
 
         if (savedInstanceState == null) {

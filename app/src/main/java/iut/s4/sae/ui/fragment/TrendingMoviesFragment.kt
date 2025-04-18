@@ -126,6 +126,7 @@ class TrendingMoviesFragment(
             carouselLoader.visibility = View.GONE
             genresLoader.visibility = View.GONE
         }
+
         loadingWatchdog.invokeOnCompletion {
             carousel.visibility = View.VISIBLE
             genreList.visibility = View.VISIBLE

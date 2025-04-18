@@ -69,7 +69,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <!-- Title -->
                     <com.google.android.material.textview.MaterialTextView
@@ -77,36 +78,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
-                        android:text=""
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:text="Movie Title"
+                        android:textAppearance="?attr/textAppearanceTitleLarge"/>
 
                     <!-- Year -->
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/movie_detail_year"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:text="(0000)"
+                        android:textAppearance="?attr/textAppearanceSubtitle1"/>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <!-- UserScore -->
-                    <TextView
-                        android:id="@+id/movie_detail_score"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="0/10" />
-
-                    <!-- Star icon -->
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/star_24px" />
-                </LinearLayout>
+                <!-- UserScore -->
+                <TextView
+                    android:id="@+id/movie_detail_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0/10"
+                    android:gravity="center"
+                    app:drawableRightCompat="@drawable/star_24px" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -117,15 +108,16 @@
                         android:id="@+id/movie_detail_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="" />
+                        android:text="00/00/0000"/>
 
                     <TextView
                         android:id="@+id/movie_detail_runtime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-
-                        android:text="" />
+                        android:text="0h00"
+                        android:gravity="center"
+                        android:drawableRight="@drawable/schedule_24px"/>
                 </LinearLayout>
 
                 <!-- Genres -->
@@ -148,8 +140,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/overview"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
                     app:layout_constraintStart_toStartOf="@+id/movie_detail_poster"
                     app:layout_constraintTop_toBottomOf="@+id/movie_detail_poster" />
 
@@ -158,6 +149,7 @@
                     android:id="@+id/movie_detail_overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceBody1"
                     android:text="overview content" />
 
 
@@ -169,8 +161,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/similar_movie"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                android:textAppearance="?attr/textAppearanceTitleLarge"
                 app:layout_constraintStart_toStartOf="@+id/movie_detail_overview_containter"
                 app:layout_constraintTop_toBottomOf="@+id/movie_detail_overview_containter" />
 

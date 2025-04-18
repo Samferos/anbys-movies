@@ -34,31 +34,13 @@
             android:layout_marginHorizontal="16dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:orientation="vertical">
-            <com.google.android.material.chip.ChipGroup
-                android:layout_width="match_parent"
+            <Button
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/search_chip_group">
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/search_chip_by_year"
-                    style="@style/Widget.Material3.Chip.Filter"
-                    android:text="@string/search_filter_by_year"/>
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/search_chip_by_popularity"
-                    style="@style/Widget.Material3.Chip.Filter"
-                    app:checkedIcon="@drawable/trending_up_24px"
-                    android:text="@string/search_filter_by_popularity"/>
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/search_chip_by_order"
-                    style="@style/Widget.Material3.Chip.Filter"
-                    app:checkedIcon="@drawable/swap_vert_24px"
-                    android:text="@string/search_filter_by_order"/>
-            </com.google.android.material.chip.ChipGroup>
+                android:text="@string/search_filter_open"
+                android:id="@+id/search_filter_open"
+                android:visibility="gone"
+                style="@style/Widget.Material3.Button.TextButton"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -83,5 +65,4 @@
                     android:indeterminate="true"/>
             </FrameLayout>
         </LinearLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

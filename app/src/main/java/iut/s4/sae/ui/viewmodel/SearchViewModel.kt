@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import iut.s4.sae.action.ACTION_SEARCH_BY_GENRE
 import iut.s4.sae.action.ACTION_SEARCH_BY_MOVIE
+import iut.s4.sae.model.MovieSortType
 import iut.s4.sae.model.Movies
+import iut.s4.sae.model.getSortParam
 import iut.s4.sae.network.MovieDao
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +33,8 @@ class SearchViewModel : ViewModel() {
     private var currentPage: Int = 1
     private var language: String = "en"
     private var includeAdult: Boolean = false
+    var sortType : MovieSortType = MovieSortType.BY_POPULARITY
+    var ascendingSort : Boolean = false
 
     private val _newMoviesFlow = MutableStateFlow(Movies(mutableListOf()))
     val newMoviesFlow: StateFlow<Movies> = _newMoviesFlow.asStateFlow()
@@ -72,13 +76,17 @@ class SearchViewModel : ViewModel() {
      * @return A [Job] representing the status of the
      * movies list fetch.
      */
-    fun searchGenres(genreId: Int): Job {
-        this.genreId = genreId
+    fun searchGenres(genreId: Int? = null): Job {
+        if (genreId != null)
+            this.genreId = genreId
         searchType = ACTION_SEARCH_BY_GENRE
         currentPage = 1
         return viewModelScope.launch {
             val newMovies = MovieDao.getInstance().discoverByGenre(
-                genreId, currentPage, language = language, includeAdult = includeAdult
+                genreId ?: this@SearchViewModel.genreId, currentPage,
+                getSortParam(sortType, ascendingSort),
+                includeAdult,
+                language
             )
             moviesResults.results.clear()
             moviesResults.results.addAll(newMovies.results)
@@ -110,8 +118,9 @@ class SearchViewModel : ViewModel() {
                     val newMovies = MovieDao.getInstance().discoverByGenre(
                         genreId,
                         ++currentPage,
-                        language = language,
-                        includeAdult = includeAdult
+                        getSortParam(sortType, ascendingSort),
+                        includeAdult,
+                        language
                     )
                     moviesResults.results.addAll(newMovies.results)
                     _newMoviesFlow.value = newMovies
