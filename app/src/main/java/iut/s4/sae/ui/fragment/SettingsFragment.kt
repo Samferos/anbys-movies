@@ -47,7 +47,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             context?.let { it1 ->
                 MaterialAlertDialogBuilder(it1)
                     .setTitle(resources.getString(R.string.app_name))
-                    .setIcon(resources.getDrawable(R.drawable.ic_launcher_foreground))
+                    .setIcon(R.drawable.ic_launcher_foreground)
                     .setMessage(resources.getString(R.string.content_dialog))
                     .setPositiveButton(resources.getString(R.string.close_dialog)) { dialog, _ ->
                         dialog.cancel()

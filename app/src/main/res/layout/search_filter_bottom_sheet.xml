@@ -3,27 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/search_bottom_sheet"
+    style="?attr/bottomSheetStyle"
     app:layout_behavior="@string/bottom_sheet_behavior">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:orientation="vertical">
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/search_filter_toggle_button"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:singleSelection="true">
-            <Button
-                android:id="@+id/search_filter_button_asc"
-                android:text="@string/search_filter_ascending"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <Button
-                android:id="@+id/search_filter_button_desc"
-                android:text="@string/search_filter_descending"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+            android:text="@string/search_filter_sort_header"
+            android:textAppearance="?attr/textAppearanceTitleLarge"/>
         <RadioGroup
             android:id="@+id/search_filter_sort_types"
             android:layout_width="match_parent"
@@ -44,10 +35,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </RadioGroup>
-        <Button
-            android:layout_width="wrap_content"
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/search_filter_toggle_button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:singleSelection="true">
+            <Button
+                android:id="@+id/search_filter_button_asc"
+                android:text="@string/search_filter_ascending"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/search_filter_button_desc"
+                android:text="@string/search_filter_descending"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:id="@+id/search_filter_confirm"
+            style="@style/Widget.Material3.Button"
             android:text="@string/search_filter_confirm"/>
     </LinearLayout>
 </FrameLayout>
