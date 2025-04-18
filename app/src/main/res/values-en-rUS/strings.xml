@@ -28,6 +28,9 @@
     <string name="reload_for_language_changes">Pour que les modifications prennent effet, veuillez redémarrer l\'application</string>
     <string name="overview">Overview</string>
     <string name="favorite_indication">swipe left to delete a favorite</string>
+    <string name="similar_movie">Similar movie</string>
+    <string name="search_no_movies_found">Aucun film n\'a été trouvé à partir de la recherche donnée.</string>
+
     <string-array name="language">
         <item>Français</item>
         <item>English</item>
