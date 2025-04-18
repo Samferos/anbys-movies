@@ -12,6 +12,17 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
             style="@style/Widget.Material3.CollapsingToolbar.Large">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/in_app_name"
+                android:layout_margin="16dp"
+                android:gravity="center"
+                app:drawableEndCompat="@drawable/burgir"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                app:layout_anchor="@id/settings_fragment_view"/>
+
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/settings_toolbar"
                 android:layout_width="match_parent"
@@ -27,7 +38,6 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/settings_fragment_view"
         android:name="iut.s4.sae.ui.fragment.SettingsFragment">
-
     </androidx.fragment.app.FragmentContainerView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

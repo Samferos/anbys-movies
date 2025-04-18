@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Les Films de Anby</string>
     <string name="search_movies">Rechercher des films</string>
-    <string name="in_app_name">anby</string>
+    <string name="in_app_name">anby t\'offre ce burger virtuel</string>
     <string name="search_movies_action">Découvrir</string>
     <string name="base_actions">Actions</string>
     <string name="favourite_movies">Favoris</string>
