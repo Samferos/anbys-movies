@@ -120,33 +120,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val searchBar = findViewById<Toolbar>(R.id.main_search_bar)
-        searchBar.inflateMenu(R.menu.search_bar_menu)
-        searchBar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.search_bar_advanced_search_menu -> {
-                    TODO("Start advanced search activity")
-                }
-                R.id.search_bar_history_menu -> {
-                    TODO("Start history activity")
-                }
-                R.id.search_bar_clear_history_menu -> {
-                    TODO("Clear history")
-                }
-                else -> {
-                    false
-                }
-            }
-        }
-        return super.onCreateOptionsMenu(menu)
-    }
-
     override fun attachBaseContext(newBase: Context) {
         val lang = SettingsManager.getPreferredLanguage(newBase)
         super.attachBaseContext(LanguageContextWrapper.wrap(newBase, lang))
     }
-
 
     fun getFavoriteMovie(context : Context) : Movies {
         val sharedPreferences : SharedPreferences = context.getSharedPreferences("favorites", MODE_PRIVATE)

@@ -41,14 +41,10 @@ class MovieDao private constructor() {
      * @return [Genres] object containing a list of genre entries. Returns an empty list on failure.
      */
     suspend fun fetchGenres(language: String): Genres {
-        return try {
-            KtorClient.client.get("$BASE_URL/genre/movie/list") {
-                parameter("api_key", API_KEY)
-                parameter("language", language)
-            }.body()
-        } catch (e: Exception) {
-            Genres(emptyList())
-        }
+        return KtorClient.client.get("$BASE_URL/genre/movie/list") {
+            parameter("api_key", API_KEY)
+            parameter("language", language)
+        }.body()
     }
 
     /**

@@ -1,5 +1,6 @@
 package iut.s4.sae.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import iut.s4.sae.model.Genres
@@ -37,9 +38,14 @@ class TrendingMoviesViewModel : ViewModel() {
      */
     fun syncTrendingMovieData(language : String) {
         viewModelScope.launch {
-            _trendingMovies.value = MovieDao.getInstance().fetchTrendingMovies(timewindow, language)
+            try {
+                _trendingMovies.value = MovieDao.getInstance().fetchTrendingMovies(timewindow, language)
+                hasSynced = true
+            } catch (e: Exception) {
+                Log.e(this@TrendingMoviesViewModel::class.simpleName,
+                    "An error occurred when fetching trending movies : ${e.message}")
+            }
         }
-        hasSynced = true
     }
 
     /**
@@ -49,8 +55,13 @@ class TrendingMoviesViewModel : ViewModel() {
      */
     fun syncGenresData(language : String) {
         viewModelScope.launch {
-            _genres.value = MovieDao.getInstance().fetchGenres(language)
+            try {
+                _genres.value = MovieDao.getInstance().fetchGenres(language)
+                hasSynced = true
+            } catch (e: Exception) {
+                Log.e(this@TrendingMoviesViewModel::class.simpleName,
+                    "An error occurred when fetching movie genres : ${e.message}")
+            }
         }
-        hasSynced = true
     }
 }

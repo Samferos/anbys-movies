@@ -30,6 +30,7 @@
     <string name="favorite_indication">swipe left to delete a favorite</string>
     <string name="similar_movie">Similar movie</string>
     <string name="search_no_movies_found">Aucun film n\'a été trouvé à partir de la recherche donnée.</string>
+    <string name="main_error_no_response">No response from the server.\nAre you connected to the internet ?</string>
 
     <string-array name="language">
         <item>Français</item>
