@@ -30,6 +30,34 @@
             android:text="@string/trending_filter_weekly"/>
     </com.google.android.material.chip.ChipGroup>
 
+    <FrameLayout
+        android:id="@+id/trending_movies_fragment_carousel_loading"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="196dp">
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:indeterminate="true"
+            app:indicatorSize="128dp"
+            app:trackThickness="8dp"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/trending_movies_fragment_error"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:text="@string/main_error_no_response"
+            android:layout_gravity="center"/>
+    </FrameLayout>
+
     <!-- Carousel -->
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
@@ -46,6 +74,20 @@
         android:layout_marginBottom="8dp"
         android:textAppearance="?attr/textAppearanceDisplaySmall"
         android:text="@string/movie_genres_header"/>
+
+    <FrameLayout
+        android:id="@+id/trending_movies_fragment_genres_loading"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="196dp">
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:indeterminate="true"
+            app:indicatorSize="128dp"
+            app:trackThickness="8dp"
+            android:layout_gravity="center"/>
+    </FrameLayout>
 
     <!-- Genres -->
     <androidx.recyclerview.widget.RecyclerView

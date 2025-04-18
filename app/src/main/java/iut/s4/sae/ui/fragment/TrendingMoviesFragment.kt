@@ -22,6 +22,7 @@ import iut.s4.sae.ui.SearchActivity
 import iut.s4.sae.ui.adapter.CarouselMovieAdapter
 import iut.s4.sae.ui.adapter.GenreAdapter
 import iut.s4.sae.ui.viewmodel.TrendingMoviesViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -104,15 +105,49 @@ class TrendingMoviesFragment(
         genreList.adapter = genreListAdapter
         genreList.layoutManager = genreListLayoutManager
 
+        val carouselLoader = view.findViewById<View>(R.id.trending_movies_fragment_carousel_loading)
+        val genresLoader = view.findViewById<View>(R.id.trending_movies_fragment_genres_loading)
+        val errorText = view.findViewById<View>(R.id.trending_movies_fragment_error)
+
+        // Loading display
+        val loadingWatchdog = lifecycleScope.launch {
+            carousel.visibility = View.GONE
+            genreList.visibility = View.GONE
+            carouselLoader.visibility = View.VISIBLE
+            genresLoader.visibility = View.VISIBLE
+            delay(3000)
+            if (viewmodel.hasSynced) {
+                carousel.visibility = View.VISIBLE
+                genreList.visibility = View.VISIBLE
+            }
+            else {
+                errorText.visibility = View.VISIBLE
+            }
+            carouselLoader.visibility = View.GONE
+            genresLoader.visibility = View.GONE
+        }
+        loadingWatchdog.invokeOnCompletion {
+            carousel.visibility = View.VISIBLE
+            genreList.visibility = View.VISIBLE
+            carouselLoader.visibility = View.GONE
+            genresLoader.visibility = View.GONE
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewmodel.trendingMovies.collect {
                 carouselMovieAdapter.updateMovies(it)
+                if (loadingWatchdog.isActive && it.results.isNotEmpty()) {
+                    loadingWatchdog.cancel()
+                }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewmodel.genres.collect {
                 genreListAdapter.updateGenres(it)
+                if (loadingWatchdog.isActive && it.genres.isNotEmpty()) {
+                    loadingWatchdog.cancel()
+                }
             }
         }
     }
