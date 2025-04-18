@@ -29,18 +29,20 @@
     <string name="overview">Overview</string>
     <string name="favorite_indication">swipe left to delete a favorite</string>
     <string name="similar_movie">Similar movie</string>
+    <string name="search_filter_by_year">By Year</string>
     <string name="search_no_movies_found">No movie found with this search term</string>
     <string name="main_error_no_response">No response from the server.\nAre you connected to the internet ?</string>
     <string name="search_filter_descending">Descending</string>
     <string name="search_filter_ascending">Ascending</string>
-    <string name="search_filter_by_rating">Par note</string>
-    <string name="search_filter_by_title">Par Titre</string>
-    <string name="search_filter_open">Filtrer</string>
+    <string name="search_filter_by_rating">By Rating</string>
+    <string name="search_filter_by_title">By Title</string>
+    <string name="search_filter_open">Filter</string>
     <string name="search_filter_confirm">Confirm</string>
 
     <string name="about">About</string>
     <string name="close_dialog">Close</string>
     <string name="content_dialog">    Application developed as part of SAÉ 4 - R4.11 (Mobile Development) at IUT of Nantes.\n\nThis app uses the public API of The Movie Database (TMDb) to search and display movies.\n\nDeveloped by:\n- Samuel Antunes\n- Théo Phan\n- Lohan Boeglin\n\nAcademic year 2024–2025</string>
+    <string name="search_filter_sort_header">Sort</string>
     <string-array name="language">
         <item>Français</item>
         <item>English</item>
@@ -49,4 +51,6 @@
         <item>fr</item>
         <item>en</item>
     </string-array>
+    <string name="search_filter_by_order">By Order</string>
+    <string name="search_filter_by_popularity">By Popularity</string>
 </resources>
