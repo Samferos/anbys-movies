@@ -1,5 +1,6 @@
 package iut.s4.sae.ui.fragment
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -21,7 +22,10 @@ import android.graphics.Paint
 import android.graphics.Canvas
 import android.graphics.Color
 import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import androidx.core.graphics.withClip
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class FavoriteMoviesFragment : Fragment() {
     private var favoriteMovies : Movies? = null
@@ -72,7 +76,14 @@ class FavoriteMoviesFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                movieEntriesAdapter.removeMovie(requireContext(), position)
+                movieEntriesAdapter.removeMovie(position)
+
+                context?.getSharedPreferences("favorites", MODE_PRIVATE)?.edit() {
+                    val updatedJson = Json.encodeToString(movieEntriesAdapter.getMovies())
+                    putString("favorite_movies", updatedJson)
+                }
+
+
             }
 
             override fun onChildDraw(

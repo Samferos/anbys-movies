@@ -68,19 +68,13 @@ class MovieEntriesAdapter(private var movies : Movies = Movies(mutableListOf()),
         notifyItemRangeInserted(originalSize, moviesToAdd.results.size)
     }
 
-    fun removeMovie(context : Context, position: Int) {
+    fun removeMovie(position: Int) {
         movies.results.removeAt(position)
         notifyItemRemoved(position)
+    }
 
-        // i thought, why the hell would this function need context ?
-        // and then i saw this thing.
-        // it scared me.
-        // FIXME
-        val sharedPreferences = context.getSharedPreferences("favorites", MODE_PRIVATE)
-        sharedPreferences.edit() {
-            val updatedJson = Json.encodeToString(movies)
-            putString("favorite_movies", updatedJson)
-        }
+    fun getMovies() : Movies {
+        return movies
     }
 
     override fun getItemCount() = movies.results.size
