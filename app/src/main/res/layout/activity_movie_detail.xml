@@ -77,7 +77,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
-                        android:text="Movie Title"
+                        android:text=""
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -86,7 +86,7 @@
                         android:id="@+id/movie_detail_year"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="(year)" />
+                        android:text="" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -117,7 +117,7 @@
                         android:id="@+id/movie_detail_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="XXXX-XX-XX" />
+                        android:text="" />
 
                     <TextView
                         android:id="@+id/movie_detail_runtime"
@@ -125,7 +125,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
 
-                        android:text="runtime" />
+                        android:text="" />
                 </LinearLayout>
 
                 <!-- Genres -->
@@ -168,7 +168,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Similar movie"
+                android:text="@string/similar_movie"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/movie_detail_overview_containter"

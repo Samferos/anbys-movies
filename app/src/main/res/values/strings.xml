@@ -26,12 +26,13 @@
     <string name="search_filter_by_popularity">Par Popularité</string>
     <string name="search_filter_by_year">Par Année</string>
     <string name="search_no_movies_found">Aucun film n\'a été trouvé à partir de la recherche donnée.</string>
-    <string name="adult_tag">+18</string>
+    <string name="adult_tag" translatable="false">+18</string>
     <string name="overview">Résumé</string>
     <string name="no_favorite_movies">Il n\'y a actuellement aucun film favori</string>
     <string name="no_favorite_movies_description">Il n\'y a actuellement aucun film favori</string>
     <string name="reload_for_language_changes">For the changes to take effect, kindly restart the application</string>
     <string name="favorite_indication">Balayez vers la gauche pour supprimer un favori</string>
+    <string name="similar_movie">Films similaires</string>
     <string-array name="language">
         <item>Français</item>
         <item>English</item>
