@@ -57,11 +57,11 @@ class TrendingMoviesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val carousel = view.findViewById<RecyclerView>(R.id.trending_movies_fragment_carousel)
-        val carouselMovieAdapter = CarouselMovieAdapter(trendingMovies ?: Movies(mutableListOf())) { position ->
-            val clickedMovie = trendingMovies?.results?.get(position)
-            val movieId = clickedMovie?.id ?: return@CarouselMovieAdapter
+
+        val carouselMovieAdapter = CarouselMovieAdapter(viewmodel.trendingMovies.value) {
+            tappedMovie ->
             val intent = Intent(requireContext(), MovieDetailActivity::class.java).apply {
-                putExtra("movie_id", movieId)
+                putExtra("movie_id", tappedMovie.id)
             }
             startActivity(intent)
         }
@@ -92,10 +92,9 @@ class TrendingMoviesFragment : Fragment() {
         }
 
         val genreList = view.findViewById<RecyclerView>(R.id.trending_movies_fragment_genres)
-        val genreListAdapter = GenreAdapter(movieGenres ?: Genres(listOf())) {
-            genreId ->
-            val genre = movieGenres?.genres?.find { it.id == genreId }
-            searchGenre(genreId, genre?.name ?: "Genre")
+        val genreListAdapter = GenreAdapter(viewmodel.genres.value) {
+            genre ->
+            searchGenre(genre.id, genre.name)
         }
 
         val genreListLayoutManager = GridLayoutManager(this.context, 2)

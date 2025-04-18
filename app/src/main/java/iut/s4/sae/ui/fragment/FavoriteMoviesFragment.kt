@@ -17,12 +17,9 @@ import iut.s4.sae.R
 import iut.s4.sae.model.Movies
 import iut.s4.sae.ui.MovieDetailActivity
 import iut.s4.sae.ui.adapter.MovieEntriesAdapter
-import android.graphics.RectF
-import android.graphics.Path
 import android.graphics.Paint
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.CornerPathEffect
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.withClip
 
@@ -59,7 +56,7 @@ class FavoriteMoviesFragment : Fragment() {
         recyclerViewFavoriteMovies.adapter = movieEntriesAdapter
         recyclerViewFavoriteMovies.layoutManager = LinearLayoutManager(context)
 
-        val llNoMovie : LinearLayout = view.findViewById<LinearLayout>(R.id.ll_no_movie)
+        val llNoMovie : LinearLayout = view.findViewById(R.id.ll_no_movie)
         if (favoriteMovies!!.results.isEmpty()) {
             llNoMovie.visibility = View.VISIBLE
         } else {

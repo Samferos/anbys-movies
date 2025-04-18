@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import iut.s4.sae.R
+import iut.s4.sae.model.Genre
 import iut.s4.sae.model.Genres
 
 class GenreAdapter(
-    private val genres: Genres,
-    private val onGenreClick: (Int) -> Unit
+    private var genres: Genres,
+    private val onGenreClick: (Genre) -> Unit
 ) : RecyclerView.Adapter<GenreAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -26,9 +27,21 @@ class GenreAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.title.text = genres.genres[position].name
         holder.itemView.setOnClickListener {
-            onGenreClick(genres.genres[position].id)
+            onGenreClick(genres.genres[position])
         }
     }
 
     override fun getItemCount(): Int = genres.genres.size
+
+    fun updateGenres(newGenres: Genres) {
+        genres = newGenres
+        val difference = genres.genres.size - newGenres.genres.size
+        if (difference < 0) {
+            notifyItemRangeRemoved(0, genres.genres.size)
+        }
+        else if (difference > 0) {
+            notifyItemRangeInserted(0, genres.genres.size)
+        }
+        notifyItemRangeChanged(0, genres.genres.size)
+    }
 }

@@ -111,11 +111,10 @@ class MovieDetailActivity : AppCompatActivity() {
             similarMovie = MovieDao.getInstance().fetchSimilarMovies(movieId, language = language)
         }
 
-        val similarMovieAdapter = CarouselMovieAdapter(similarMovie ?: Movies(mutableListOf())) { position ->
-            val clickedMovie = similarMovie.results[position]
-            val _movieId = clickedMovie.id ?: return@CarouselMovieAdapter
+        val similarMovieAdapter = CarouselMovieAdapter(similarMovie ?: Movies(mutableListOf())) {
+            tappedMovie ->
             val intent = Intent(this, MovieDetailActivity::class.java).apply {
-                putExtra("movie_id", _movieId)
+                putExtra("movie_id", tappedMovie.id)
             }
             startActivity(intent)
         }
